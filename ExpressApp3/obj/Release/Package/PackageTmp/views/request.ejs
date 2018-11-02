@@ -1,0 +1,37 @@
+
+<html>
+    <% include ../partials/head %>
+    <body >
+            <% include ../partials/scripts %>
+            <% include ../partials/nav %>
+
+            <div class="container">
+                <form autocomplete="off">
+                </form>
+            </div>
+        <div class="definitionSpace">
+
+            <p>From:<br><select id="sourceLanguage">
+                    <option value="English">🇺🇸 English</option>
+                    <option value="Japanese">🇯🇵 Japanese</option>
+                  </select></p>
+
+            <p>To<br><select id="destinationLanguage">
+                    <option value="Japanese">🇯🇵 Japanese</option>
+                    <option value="English">🇺🇸 English</option>
+                  </select></p>
+
+            <p><sub>Word or Phrase you want translated: Ex: Hey Susan, that hat looks really good on you!</sub><input id="requestTerm" placeholder="Type the word or phrase you want translated here..."></p>
+            <p><sub>What type of situation is this said? Example: Casual Conversation, etc</sub><input id="TranslatorNotes" placeholder="Enter miscellaneous notes here..."></p>
+            <p><sub>Tags: greetings, romance, food</sub><input id="requestTags" placeholder="Enter tags here, separated by commas. Example: food, shopping, slang, formal"></p>
+            <p><sub>Bounty</sub><input id="bounty" value="$2.00"></p>
+            <p><sub>Requester</sub><input id="requester" value="joshsmad"></p>
+            <p><button class="submitDefinition" id="submitRequest">Submit</button></p>
+
+        </div>
+        <script src="https://code.jquery.com/jquery-1.12.4.js" integrity="sha256-Qw82+bXyGq6MydymqBxNPYTaUXXq7c8v3CwiYwLLNXU=" crossorigin="anonymous"></script>
+        <script src="/scripts/translation.js"></script>
+        <script src="/scripts/recorderFrontend.js"></script>
+        <script src="/scripts/recorder.js"></script>
+    </body>
+</html>

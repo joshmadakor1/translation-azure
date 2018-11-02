@@ -1,0 +1,17 @@
+<div class="search-bar">
+        <div class="container">
+            <form autocomplete="off" class="acForm">
+                <input id="searchInput" class="inputSearch" placeholder="Begin typing a word or phrase. Use (*) for wildcard..." type="text" >
+                <div id="autocomplete-Results" class="x">
+    <ul  class="autocomplete-Ul" id="ac-Results">
+
+        <% if(typeof matches !== 'undefined'){ %>
+            <% for(let i = 0; i < matches.length; i++) { %>
+                <li><font class="autocomplete-Font"><a href="/?word=<%= matches[i] %>"><%= matches[i] %></a></font></li>
+            <% } %>
+        <% } else { console.log('matches undefined');}%>
+    </ul>
+</div>
+</form>
+</div>
+</div>

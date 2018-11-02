@@ -1,0 +1,34 @@
+<html>
+    <% include ../partials/head %>
+    <body >
+          <% include ../partials/scripts %>
+          <% include ../partials/nav %>
+            <div class="container">
+                <form autocomplete="off">
+                </form>
+            </div>
+        <div class="definitionSpace">
+
+            <table>
+              <tr>
+
+                <td width="50%"><h2>Word/Phrase</h2> </td>
+                <td width="20%"><h2>From</h2>        </td>
+                <td width="20%"><h2>To</h2>          </td>
+                <td width="10%"><h2>Payout</h2>      </td>
+            </tr>
+            <% for (let i = 0; i < question.length; i++) { %>
+              <tr>
+                <td width="50%"><a href="/answer/?word=<%= id[i] %>"><%= question[i] %></a></td>
+                <td width="20%"><%= sourceLanguage[i] %>      </td>
+                <td width="20%"><%= destinationLanguage[i] %> </td>
+                <td width="10%"><%= bounty[i] %>              </td>
+              </tr>
+            <% } %>
+
+            </table>
+        </div>
+        <script src="https://code.jquery.com/jquery-1.12.4.js" integrity="sha256-Qw82+bXyGq6MydymqBxNPYTaUXXq7c8v3CwiYwLLNXU=" crossorigin="anonymous"></script>
+        <script src="/scripts/translation.js"></script>
+    </body>
+</html>

@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+    <% include ../partials/head %>
+    <body >
+        <% include ../partials/scripts %>
+        <% include ../partials/nav %>
+        <div class="search-bar">
+            <div class="container">
+                <form autocomplete="off" class="acForm">
+                    <input id="searchInput" class="inputSearch" placeholder="Begin typing a word or phrase. Use (*) for wildcard..." type="text" >
+                    <% include ../partials/autocomplete %>
+                </form>
+            </div>
+        </div>
+        <br>I am search.ejs
+    </body>
+</html>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+    <% include ../partials/head %>
+    <body >
+        <% include ../partials/scripts %>
+        <% include ../partials/nav %>
+        <% include ../partials/autocomplete %>
+        <div class="definitionSpace">
+        <p><b><font class="term"><%= targetWord %></font> </b> </p>
+
+        <p><b>Translation: </b> </p> 
+        <% if (Array.isArray(translation)) {   %>
+            <% for(let j = 0; j < translation.length; j++) { %>
+                <p class="indented"><%= translation[j] %></p>
+            <% } %>
+        <% } else { %>
+            <p class="indented"><%= translation[i] %></p>
+        <% } %>
+        <p><a class="playButton" href="/audio/<%= audioWord %>">▶ (Listen Word)</a></p>
+
+        <p><b>Example Sentence:</b></p>
+                
+        <% if (Array.isArray(exampleSentence)) {   %>
+            <% for(let k = 0; k <= exampleSentence.length; k++) { %>
+                <p class="indented"><%= exampleSentence[k] %></p>
+            <% } %>
+        <% } else { %>
+            <p class="indented"><%= exampleSentence %></p>
+        <% } %>
+        <a class="playButton" href="/audio/<%= audioSentence %>">▶ (Listen Sentence)</a>
+
+        <p><b>Author:</b></p>
+        <p class="indented"><%= author %></p>
+        <p><font><a href="#">👍</a></font><%= upvotes %> <font><a href="#">👎</a></font><%= downvotes %></p>
+        </div>
+        <br><center>I am definition.ejs</center>
+</body>
+</html>

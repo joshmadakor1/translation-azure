@@ -1,0 +1,50 @@
+<html>
+    <% include ../partials/head %>
+    <body >
+        <% include ../partials/scripts %>
+        <% include ../partials/nav %>
+        <div class="container">
+            <form autocomplete="off">
+            </form>
+        </div>
+        <div class="definitionSpace">
+        <table>
+          <tr>
+          <td width="50%"><h2>Word/Phrase</h2> </td>
+            <td width="20%"><h2>From</h2></td>
+            <td width="20%"><h2>To</h2></td>
+            <td width="10%"><h2>Payout</h2></td>
+        </tr>
+          <tr>
+          <td width="50%"><div id="term"><%= question %></div></td>
+            <td width="20%"><%= sourceLanguage %></td>
+            <td width="20%"><%= destinationLanguage %> </td>
+            <td width="10%"><%= bounty %> </td>
+          </tr>
+        </table>
+      </div>
+
+      <div class="definitionSpace">
+
+          <p><sub>Ex: neko,ねこ,猫</sub><textarea id="WordTranslation" placeholder="<%= destinationLanguage %> translation goes here..."></textarea></p>
+          <p><sub>Click 'record' to record the word!</sub><br /><button id="startRecordingWord" onclick="startRecording(this);">record</button>
+              <button id="stopRecordingWord" onclick="stopRecording(this);" disabled>stop</button>
+              <ul id="recordingslist"></ul></p>
+          <p><sub>Ex: Ah! There is a cat!, あ！ねこがいますよ！, あ！猫がいますよ！</sub><textarea id="SentenceTranslation" placeholder="Example sentence goes here..."></textarea></p></p>
+          <p><sub>Click 'record' to record the example sentence!<br />
+          <button id="startRecordingSentence" onclick="startRecording2(this);">record</button>
+
+              <button id="stopRecordingSentence" onclick="stopRecording2(this);" disabled>stop</button>
+              <ul id="recordingslist2"></ul></p>
+          <p><sub>Ex: kitten = koneko,こねこ,子猫</sub><input id="TranslatorNotes" placeholder="Enter miscellaneous notes here..."></p>
+          <p><sub>Ex: animals</sub><input id="Tags" placeholder="Enter tags here, separated by commas. Example: food, shopping, slang, formal"></p>
+          <p><input id="author" placeholder="Enter username" value="joshsmad"></p>
+          <p><button class="submitDefinition" id="submitWord">Submit</button></p>
+      </div>
+
+      <script src="https://code.jquery.com/jquery-1.12.4.js" integrity="sha256-Qw82+bXyGq6MydymqBxNPYTaUXXq7c8v3CwiYwLLNXU=" crossorigin="anonymous"></script>
+      <script src="/scripts/translation.js"></script>
+      <script src="/scripts/recorderFrontend.js"></script>
+      <script src="/scripts/recorder.js"></script>
+</body>
+</html>
