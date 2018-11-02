@@ -5,11 +5,8 @@ const ES_MAXIMUM_QUERY_RESULT_SIZE = 25;
 let randomNumber = Math.floor((Math.random() * emojis.length) + 1);
 const multer = require('multer');
 var path = require('path');
-let appRoot = path.dirname(require.main.filename);
 const AUDIO_LOCATION = "public/audio";
 var upload = multer({ dest: AUDIO_LOCATION});
-//var upload = multer({ dest: `${appRoot}\\public\\audio` });
-//const AUDIO_LOCATION = `${appRoot}\\public\\audio`;
 var type = upload.single('upl');
 const fs = require('fs');
 
@@ -388,7 +385,6 @@ module.exports = function (app) {
     });
 
     app.post("/uploadAudio", type, function (request, response) {
-        let appRoot = path.dirname(require.main.filename);
         console.log(`OLD: ${AUDIO_LOCATION}\\${request.file.filename}`);
         console.log(`NEW: ${AUDIO_LOCATION}\\${request.file.originalname}`);
         
@@ -396,9 +392,10 @@ module.exports = function (app) {
         fs.rename(`${AUDIO_LOCATION}/${request.file.filename}`, `${AUDIO_LOCATION}/${request.file.originalname}`, function (err) {
             console.log(err);
         });
+        /*
         fs.rename(`${AUDIO_LOCATION}\\${request.file.filename}`, `${AUDIO_LOCATION}\\${request.file.originalname}`, function (err) {
             console.log(err);
-        });
+        });*/
         
     });
 
