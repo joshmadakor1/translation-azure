@@ -2,9 +2,7 @@
 //const emojis           = ["凸(｀0´)凸","凸ಠ益ಠ)凸","凸(⊙▂⊙✖ )","┌П┐(►˛◄’!)","凸(-0-メ)","凸(｀⌒´メ)凸","凸(｀△´＋）","( ︶︿︶)_╭∩╮","凸(｀ι _´メ）","凸(>皿<)凸","凸(^▼ｪ▼ﾒ^)","t(=n=)","t(- n -)t","凸(¬‿¬)","(◣_◢)┌∩┐","┌∩┐(ಠ_ಠ)┌∩┐","╭∩╮(︶︿︶)╭∩╮","╭∩╮(-_-)╭∩╮","ᕕ༼ ͠ຈ Ĺ̯ ͠ຈ ༽┌∩┐","( ≧Д≦)","(；￣Д￣）","(;¬_¬)","（；¬＿¬)","(｡+･`ω･´)","｡゜(｀Д´)゜｡","(　ﾟДﾟ)＜!!","(‡▼益▼)","(,,#ﾟДﾟ)","(҂⌣̀_⌣́)","(；¬д¬)","（;≧皿≦）","(╬ﾟ◥益◤ﾟ)","(╬⓪益⓪)","[○･｀Д´･○]","૮( ᵒ̌▱๋ᵒ̌ )ა","(⁎˃ᆺ˂)","(ꐦ°᷄д°᷅)","((╬●∀●)","(╬ Ò ‸ Ó)","( >д<)","(*｀益´*)","(; ･`д･´)","(☞◣д◢)☞","<(｀^´)>","(;｀O´)o","(ꐦ ಠ皿ಠ )","（｀Δ´）！","(*｀Ω´*)","(╬ಠ益ಠ)","(╬ﾟ◥益◤ﾟ) ╬ﾟ","(ு⁎ு)྆྆","(╬⓪益⓪)","（╬ಠ益ಠ)","(●o≧д≦)o","=͟͟͞͞( •̀д•́)))","(๑･`▱´･๑)","༼ つ ͠° ͟ ͟ʖ ͡° ༽つ","(☄ฺ◣д◢)☄ฺ","ꀯ(‴ꑒ᷅⺫ꑒ᷄)","(#｀皿´)","(｀Д´)","(ﾒﾟ皿ﾟ)","(o｀ﾟ皿ﾟ)","( ╬◣ 益◢)","（╬ಠ益ಠ)","（♯▼皿▼）","( ╬◣ 益◢）y━･~","（○｀Ｏ´○）","(; ･`д･´)","｜。｀＞Д＜｜","(; ･`д･´)​","( •̀ω•́ )σ","૮(ꂧꁞꂧ)ა"];
 const emojis = ["(҂⌣̀_⌣́)", "(҂⌣̀_⌣́)"];
 const ES_MAXIMUM_QUERY_RESULT_SIZE = 25;
-let randomNumber = Math.floor((Math.random() * emojis.length) + 1);
 const multer = require('multer');
-var path = require('path');
 const AUDIO_LOCATION = "public/audio";
 var upload = multer({ dest: AUDIO_LOCATION});
 var type = upload.single('upl');
@@ -36,7 +34,6 @@ module.exports = function (app) {
     }
 
     app.get('/earn', function (mainRequest, mainResponse) {
-
         let requestItem = esRequest({
             url: `${esUrl}:${esPort}/requests/_search`,
             method: 'GET',
@@ -97,24 +94,29 @@ module.exports = function (app) {
                 json: { "query": { "match": { "question": targetWord } } }
             }, function (request, response) {
                 //console.log(response.body.hits);
-                requestItem = response.body.hits;
+                let number_Of_Hits = response.body.hits.total;
                 //console.log(requestItem.hits[0]);
-
-                let count = 0;
-                let translation, author, exampleSentence, audioWord, audioSentence, upvotes, downvotes = [];
-                let definitionArray = response.body.hits.hits[0]._source.answers;
-                for (var def in definitionArray) {
-
-                    translation = response.body.hits.hits[0]._source.answers[count].definition.translation;
-                    author = response.body.hits.hits[0]._source.answers[count].definition.author;
-                    exampleSentence = response.body.hits.hits[0]._source.answers[count].definition.exampleSentence;
-                    audioWord = response.body.hits.hits[0]._source.answers[count].definition.audioWord;
-                    audioSentence = response.body.hits.hits[0]._source.answers[count].definition.audioSentence;
-                    upvotes = response.body.hits.hits[0]._source.answers[count].definition.upvotes;
-                    downvotes = response.body.hits.hits[0]._source.answers[count].definition.downvotes;
-
-                    count++;
+                console.log(`NUMBER OF HITS: ${number_Of_Hits}`);
+                let translation = []; let author = []; let exampleSentence = []; let audioWord = []; let audioSentence = []; let upvotes = []; let downvotes = [];
+                
+                try {
+                    definitionArray = response.body.hits.hits[0]._source.answers
                 }
+                catch (error) {
+
+                }
+                for (let count = 0; count < number_Of_Hits; count++) {
+                    translation.push(response.body.hits.hits[count]._source.answers[0].definition.translation);
+                    author.push(response.body.hits.hits[count]._source.answers[0].definition.author);
+                    exampleSentence.push(response.body.hits.hits[count]._source.answers[0].definition.exampleSentence);
+                    audioWord.push(response.body.hits.hits[count]._source.answers[0].definition.audioWord);
+                    audioSentence.push(response.body.hits.hits[count]._source.answers[0].definition.audioSentence);
+                    upvotes.push(response.body.hits.hits[count]._source.answers[0].definition.upvotes);
+                    downvotes.push(response.body.hits.hits[count]._source.answers[0].definition.downvotes);
+                }
+                
+                    
+                
                 console.log('rendering this ho');
 
                 // This will happen if the user goes straight to a defintion URL without searching
@@ -129,9 +131,9 @@ module.exports = function (app) {
                 }
                 mainRequest.session.message = JSON.stringify(jsonStuff);
 
-                console.log(`TOTAL TRANSLATIONS --------------- ${count} -----------`)
+                console.log(`TOTAL TRANSLATIONS --------------- ${number_Of_Hits} -----------`)
                 mainResponse.render("index", {
-                    numberOfTranslations: count,
+                    numberOfTranslations: number_Of_Hits,
                     targetWord: targetWord,
                     translation: translation,
                     author: author,
@@ -161,10 +163,6 @@ module.exports = function (app) {
                 // First time the page has load, or no search matches have been inserted into request.message
                 console.log('first time page has loaded');
 
-
-
-
-
                 let requestItem = esRequest({
                     url: `${esUrl}:${esPort}/${translationType}/_search`,
                     method: 'GET',
@@ -177,10 +175,16 @@ module.exports = function (app) {
                         }
                     }
                 }, function (request, response) {
-                    let rand = Math.floor((Math.random() * 1));
+                    //load random word for first page load
+                    let rand = Math.floor((Math.random() * (response.body.hits.hits.length - 1))); //TODO: Fix this so it's more randomized
                     requestItem = response.body.hits;
-                    let targetWord = response.body.hits.hits[rand]._source.question;
+                    let targetWord = "";
+                    try {
+                        targetWord = response.body.hits.hits[rand]._source.question;
+                    }
+                    catch (error) {
 
+                    }
 
 
                     let jsonStuff = {
@@ -203,8 +207,8 @@ module.exports = function (app) {
         console.log('--> post /request');
 
         esRequest({
-            url: `${esUrl}:${esPort}/requests/x/${replace_Spaces_With_Underscores(request.body.term)}`,
-            method: 'PUT',
+            url: `${esUrl}:${esPort}/requests/x`,
+            method: 'POST',
             contentType: "application/json",
             json: {
                 "sourceLanguage": request.body.sourceLanguage,
@@ -231,9 +235,12 @@ module.exports = function (app) {
         //renderPage(response,"submitDef");
         //console.log(request.body);
         console.log(replace_Spaces_With_Underscores(mainRequest.body.term))
+        console.log(`${esUrl}:${esPort}/translations/x`);
+
+
         esRequest({
-            url: `${esUrl}:${esPort}/${translationType}/x/${replace_Spaces_With_Underscores(mainRequest.body.term)}`,
-            method: 'PUT',
+            url: `${esUrl}:${esPort}/translations/x`,
+            method: 'POST',
             contentType: "application/json",
             json: {
                 "destinationLanguage": "japanese",
@@ -257,12 +264,13 @@ module.exports = function (app) {
                 ]
             }
         },
+            
             function (request, response) {
-                let result = response.body.result;
-                let id = replace_Spaces_With_Underscores(mainRequest.body.term);
-                console.log(id);
+                let result = response.body;
                 console.log('----------------------------------------');
                 console.log(result);
+                mainResponse.sendStatus(200);
+                /*
                 if (result === "updated" || result === "created") {
                     console.log(replace_Spaces_With_Underscores(mainRequest.body.term));
                     //If Elasticsearch could update/add the record, send a success status
@@ -279,12 +287,13 @@ module.exports = function (app) {
                     //If Elasticsearch failed to update/add the record, send a failure status
                     mainResponse.sendStatus(500)
                 }
-
+                */
             });
 
     });
 
     // Text is changed on the main page search bar, update autocomplete results
+    //TODO: If a definition already exists with the same "question", add it as an item to the answers array
     app.post('/', urlencodedParser, function (mainRequest, mainResponse) {
         console.log(`--> post /  mainRequest.body.question ${mainRequest.body.question}`);
         let searchTerm = null;
@@ -361,7 +370,9 @@ module.exports = function (app) {
                     if (numberOfSearchHits > 0) {
                         for (var hit in response.body.hits.hits) {
                             wordToBePushedIntoAutocompleteResults = response.body.hits.hits[count]._source.question;
-                            searchMatches.push(wordToBePushedIntoAutocompleteResults);
+                            if (!searchMatches.includes(wordToBePushedIntoAutocompleteResults)) {
+                                searchMatches.push(wordToBePushedIntoAutocompleteResults);
+                            }
                             count++;
                         }
                     }
@@ -405,7 +416,7 @@ module.exports = function (app) {
         esRequest({
             url: `${esUrl}:${esPort}/requests/_search`,
             method: 'GET',
-            json: { "query": { "match": { "_id": targetWord } } }
+            json: { "query": { "match": { "question": targetWord } } }
         }, function (request, response) {
 
             let sourceLanguage = null;

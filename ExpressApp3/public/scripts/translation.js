@@ -15,10 +15,9 @@ $(document).ready(function(){
             url: `/`,
             cache: false,
             data: currentText,
-            success: function(data){
+            success: function (data) {
                 $("#autocomplete-Results").load(" #autocomplete-Results");
-                //console.log(data);
-                if (entries_Exist_In_The_Autocomplete_List(data)){
+                if (entries_Exist_In_The_Autocomplete_List(data)) {
                     let htmlAutocompleteString = extract_Autocomplete_Items(data);
                     document.getElementById('autocomplete-Results').innerHTML = htmlAutocompleteString
 
@@ -105,7 +104,7 @@ $(document).ready(function(){
     });
 
 
-    $('#submitWord').on('click', function() {
+    $('#submitWord').unbind("click").click(function () {
         let term = document.getElementById("term").value;
         if (term === undefined) {
           term = document.getElementById("term").innerHTML;

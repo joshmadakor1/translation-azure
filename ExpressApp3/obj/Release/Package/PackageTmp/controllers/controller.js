@@ -2,14 +2,9 @@
 //const emojis           = ["凸(｀0´)凸","凸ಠ益ಠ)凸","凸(⊙▂⊙✖ )","┌П┐(►˛◄’!)","凸(-0-メ)","凸(｀⌒´メ)凸","凸(｀△´＋）","( ︶︿︶)_╭∩╮","凸(｀ι _´メ）","凸(>皿<)凸","凸(^▼ｪ▼ﾒ^)","t(=n=)","t(- n -)t","凸(¬‿¬)","(◣_◢)┌∩┐","┌∩┐(ಠ_ಠ)┌∩┐","╭∩╮(︶︿︶)╭∩╮","╭∩╮(-_-)╭∩╮","ᕕ༼ ͠ຈ Ĺ̯ ͠ຈ ༽┌∩┐","( ≧Д≦)","(；￣Д￣）","(;¬_¬)","（；¬＿¬)","(｡+･`ω･´)","｡゜(｀Д´)゜｡","(　ﾟДﾟ)＜!!","(‡▼益▼)","(,,#ﾟДﾟ)","(҂⌣̀_⌣́)","(；¬д¬)","（;≧皿≦）","(╬ﾟ◥益◤ﾟ)","(╬⓪益⓪)","[○･｀Д´･○]","૮( ᵒ̌▱๋ᵒ̌ )ა","(⁎˃ᆺ˂)","(ꐦ°᷄д°᷅)","((╬●∀●)","(╬ Ò ‸ Ó)","( >д<)","(*｀益´*)","(; ･`д･´)","(☞◣д◢)☞","<(｀^´)>","(;｀O´)o","(ꐦ ಠ皿ಠ )","（｀Δ´）！","(*｀Ω´*)","(╬ಠ益ಠ)","(╬ﾟ◥益◤ﾟ) ╬ﾟ","(ு⁎ு)྆྆","(╬⓪益⓪)","（╬ಠ益ಠ)","(●o≧д≦)o","=͟͟͞͞( •̀д•́)))","(๑･`▱´･๑)","༼ つ ͠° ͟ ͟ʖ ͡° ༽つ","(☄ฺ◣д◢)☄ฺ","ꀯ(‴ꑒ᷅⺫ꑒ᷄)","(#｀皿´)","(｀Д´)","(ﾒﾟ皿ﾟ)","(o｀ﾟ皿ﾟ)","( ╬◣ 益◢)","（╬ಠ益ಠ)","（♯▼皿▼）","( ╬◣ 益◢）y━･~","（○｀Ｏ´○）","(; ･`д･´)","｜。｀＞Д＜｜","(; ･`д･´)​","( •̀ω•́ )σ","૮(ꂧꁞꂧ)ა"];
 const emojis = ["(҂⌣̀_⌣́)", "(҂⌣̀_⌣́)"];
 const ES_MAXIMUM_QUERY_RESULT_SIZE = 25;
-let randomNumber = Math.floor((Math.random() * emojis.length) + 1);
 const multer = require('multer');
-var path = require('path');
-let appRoot = path.dirname(require.main.filename);
 const AUDIO_LOCATION = "public/audio";
 var upload = multer({ dest: AUDIO_LOCATION});
-//var upload = multer({ dest: `${appRoot}\\public\\audio` });
-//const AUDIO_LOCATION = `${appRoot}\\public\\audio`;
 var type = upload.single('upl');
 const fs = require('fs');
 
@@ -39,7 +34,6 @@ module.exports = function (app) {
     }
 
     app.get('/earn', function (mainRequest, mainResponse) {
-
         let requestItem = esRequest({
             url: `${esUrl}:${esPort}/requests/_search`,
             method: 'GET',
@@ -105,7 +99,13 @@ module.exports = function (app) {
 
                 let count = 0;
                 let translation, author, exampleSentence, audioWord, audioSentence, upvotes, downvotes = [];
-                let definitionArray = response.body.hits.hits[0]._source.answers;
+                let definitionArray = [];
+                try {
+                    definitionArray = response.body.hits.hits[0]._source.answers
+                }
+                catch (error) {
+
+                }
                 for (var def in definitionArray) {
 
                     translation = response.body.hits.hits[0]._source.answers[count].definition.translation;
@@ -180,10 +180,16 @@ module.exports = function (app) {
                         }
                     }
                 }, function (request, response) {
-                    let rand = Math.floor((Math.random() * 1));
+                    //load random word for first page load
+                    let rand = Math.floor((Math.random() * (response.body.hits.hits.length - 1))); //TODO: Fix this so it's more randomized
                     requestItem = response.body.hits;
-                    let targetWord = response.body.hits.hits[rand]._source.question;
+                    let targetWord = "";
+                    try {
+                        targetWord = response.body.hits.hits[rand]._source.question;
+                    }
+                    catch (error) {
 
+                    }
 
 
                     let jsonStuff = {
@@ -388,7 +394,6 @@ module.exports = function (app) {
     });
 
     app.post("/uploadAudio", type, function (request, response) {
-        let appRoot = path.dirname(require.main.filename);
         console.log(`OLD: ${AUDIO_LOCATION}\\${request.file.filename}`);
         console.log(`NEW: ${AUDIO_LOCATION}\\${request.file.originalname}`);
         
@@ -396,9 +401,10 @@ module.exports = function (app) {
         fs.rename(`${AUDIO_LOCATION}/${request.file.filename}`, `${AUDIO_LOCATION}/${request.file.originalname}`, function (err) {
             console.log(err);
         });
+        /*
         fs.rename(`${AUDIO_LOCATION}\\${request.file.filename}`, `${AUDIO_LOCATION}\\${request.file.originalname}`, function (err) {
             console.log(err);
-        });
+        });*/
         
     });
 

@@ -100,7 +100,8 @@ var Recorder = exports.Recorder = (function () {
             };
 
             function init(config) {
-                sampleRate = config.sampleRate;
+                //sampleRate = config.sampleRate;
+                sampleRate = 12000;
                 numChannels = config.numChannels;
                 initBuffers();
             }
@@ -160,7 +161,19 @@ var Recorder = exports.Recorder = (function () {
             }
 
             function interleave(inputL, inputR) {
-                var length = inputL.length + inputR.length;
+                var length = inputL.length / 4;
+                var result = new Float32Array(length);
+
+                var index = 0,
+                    inputIndex = 0;
+
+                while (index < length) {
+                    result[index++] = 0.25 * (inputL[inputIndex++] + inputL[inputIndex++] +
+                        inputL[inputIndex++] + inputL[inputIndex++]);
+                }
+
+                return result;
+                /*var length = inputL.length + inputR.length;
                 var result = new Float32Array(length);
 
                 var index = 0,
@@ -171,7 +184,7 @@ var Recorder = exports.Recorder = (function () {
                     result[index++] = inputR[inputIndex];
                     inputIndex++;
                 }
-                return result;
+                return result;*/
             }
 
             function floatTo16BitPCM(output, offset, input) {
@@ -204,7 +217,7 @@ var Recorder = exports.Recorder = (function () {
                 /* sample format (raw) */
                 view.setUint16(20, 1, true);
                 /* channel count */
-                view.setUint16(22, numChannels, true);
+                view.setUint16(22, 1, true);
                 /* sample rate */
                 view.setUint32(24, sampleRate, true);
                 /* byte rate (sample rate * block align) */

@@ -19,7 +19,7 @@
             </tr>
             <% for (let i = 0; i < question.length; i++) { %>
               <tr>
-                <td width="50%"><a href="/answer/?word=<%= id[i] %>"><%= question[i] %></a></td>
+                <td width="50%"><a href="/answer/?word=<%= question[i] %>"><%= question[i] %></a></td>
                 <td width="20%"><%= sourceLanguage[i] %>      </td>
                 <td width="20%"><%= destinationLanguage[i] %> </td>
                 <td width="10%"><%= bounty[i] %>              </td>

@@ -3,9 +3,9 @@
     <p><b><font class="term"><%= targetWord %></font> </b> </p>
     <p><b>Word: </b> </p> 
 	<p><button onclick="playWord()">▶ (Listen Word)</button></p>
-    <% if (Array.isArray(translation)) {   %>
-        <% for(let j = 0; j < translation.length; j++) { %>
-            <p class="indented"><%= translation[j] %></p>
+    <% if (Array.isArray(translation[i])) {   %>
+        <% for(let j = 0; j < translation[i].length; j++) { %>
+            <p class="indented"><%= translation[i][j] %></p>
         <% } %>
     <% } else { %>
         <p class="indented"><%= translation %></p>
@@ -15,9 +15,9 @@
     <p><b>Example Sentence:</b></p>
 	<p><button onclick="playSentence()">▶ (Listen Sentence)</button></p>
             
-    <% if (Array.isArray(exampleSentence)) {   %>
-        <% for(let k = 0; k <= exampleSentence.length; k++) { %>
-            <p class="indented"><%= exampleSentence[k] %></p>
+    <% if (Array.isArray(exampleSentence[i])) {   %>
+        <% for(let k = 0; k <= exampleSentence[i].length; k++) { %>
+            <p class="indented"><%= exampleSentence[i][k] %></p>
         <% } %>
     <% } else { %>
         <p class="indented"><%= exampleSentence %></p>
