@@ -1,7 +1,7 @@
 ﻿<% for (let i = 0; i < numberOfTranslations; i++) { %>
 <div class="definitionSpace">
     <p><b><font class="term"><%= targetWord %></font> </b> </p>
-    <p><b>Word: </b> </p> 
+    <hr><p><b>Word: </b> </p> 
 	<p><button onclick="playWord()">▶ (Listen Word)</button></p>
     <% if (Array.isArray(translation[i])) {   %>
         <% for(let j = 0; j < translation[i].length; j++) { %>
@@ -12,7 +12,7 @@
     <% } %>
 	<audio id="audioWord" src="/audio/<%= audioWord %>" ></audio>
 
-    <p><b>Example Sentence:</b></p>
+    <hr><p><b>Example Sentence:</b></p>
 	<p><button onclick="playSentence()">▶ (Listen Sentence)</button></p>
             
     <% if (Array.isArray(exampleSentence[i])) {   %>
@@ -25,8 +25,12 @@
     
 	<audio id="audioSentence" src="/audio/<%= audioSentence %>" ></audio>
 
-    <p><b>Author:</b></p>
-    <p class="indented"><%= author %></p>
-    <p><font><a href="#">👍</a></font><%= upvotes %> <font><a href="#">👎</a></font><%= downvotes %></p>
+    <hr><p><b>Author:</b></p>
+    <p class="indented"><%= author[i] %></p>
+	<hr><p><b>Tags:</b></p>
+    <p class="indented"><%= tags[i] %></p>
+    <p><font><a href="#">👍</a></font><%= upvotes[i] %> <font><a href="#">👎</a></font><%= downvotes[i] %></p>
+	<p><font size="0"><%= id[i] %></font></p>
+
 </div>
 <% } %>

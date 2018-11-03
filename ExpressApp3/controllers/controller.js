@@ -39,6 +39,12 @@ module.exports = function (app) {
             method: 'GET',
             json: { "query": { "match_all": {} } }
         }, function (request, response) {
+            if (response.body.error) {
+                let error = JSON.stringify(response.body.error.root_cause[0].type);
+                console.log('there was an error.');
+                mainResponse.end(`<h1>ERROR</h1><h2>${error}</h2><h3><a href="mailto:josh.madakor@gmail.com">Notify Admin</a></h3>`);
+                return;
+            }
             //console.log(response.body.hits.hits);
 
             requestItem = response.body.hits;
@@ -93,11 +99,25 @@ module.exports = function (app) {
                 method: 'GET',
                 json: { "query": { "match": { "question": targetWord } } }
             }, function (request, response) {
+                if (response.body.error) {
+                    let error = JSON.stringify(response.body.error.root_cause[0].type);
+                    console.log('there was an error.');
+                    mainResponse.end(`<h1>ERROR</h1><h2>${error}</h2><h3><a href="mailto:josh.madakor@gmail.com">Notify Admin</a></h3>`);
+                    return;
+                }
                 //console.log(response.body.hits);
                 let number_Of_Hits = response.body.hits.total;
                 //console.log(requestItem.hits[0]);
                 console.log(`NUMBER OF HITS: ${number_Of_Hits}`);
-                let translation = []; let author = []; let exampleSentence = []; let audioWord = []; let audioSentence = []; let upvotes = []; let downvotes = [];
+                let translation = [];
+                let author = [];
+                let exampleSentence = [];
+                let audioWord = [];
+                let audioSentence = [];
+                let upvotes = [];
+                let downvotes = [];
+                let id = [];
+                let tags = [];
                 
                 try {
                     definitionArray = response.body.hits.hits[0]._source.answers
@@ -113,6 +133,8 @@ module.exports = function (app) {
                     audioSentence.push(response.body.hits.hits[count]._source.answers[0].definition.audioSentence);
                     upvotes.push(response.body.hits.hits[count]._source.answers[0].definition.upvotes);
                     downvotes.push(response.body.hits.hits[count]._source.answers[0].definition.downvotes);
+                    tags.push(response.body.hits.hits[count]._source.answers[0].definition.tags);
+                    id.push(response.body.hits.hits[count]._id);
                 }
                 
                     
@@ -143,7 +165,9 @@ module.exports = function (app) {
                     upvotes: upvotes,
                     downvotes: downvotes,
                     sessionID: mainRequest.sessionID,
-                    matches: jsonObject.matches
+                    matches: jsonObject.matches,
+                    tags: tags,
+                    id: id
                 });
             })
 
@@ -176,6 +200,12 @@ module.exports = function (app) {
                     }
                 }, function (request, response) {
                     //load random word for first page load
+                    if (response.body.error) {
+                        let error = JSON.stringify(response.body.error.root_cause[0].type);
+                        console.log('there was an error.');
+                        mainResponse.end(`<h1>ERROR</h1><h2>${error}</h2><h3><a href="mailto:josh.madakor@gmail.com">Notify Admin</a></h3>`);
+                        return;
+                    }
                     let rand = Math.floor((Math.random() * (response.body.hits.hits.length - 1))); //TODO: Fix this so it's more randomized
                     requestItem = response.body.hits;
                     let targetWord = "";
@@ -221,6 +251,12 @@ module.exports = function (app) {
             }
         },
             function (request, response) {
+                if (response.body.error) {
+                    let error = JSON.stringify(response.body.error.root_cause[0].type);
+                    console.log('there was an error.');
+                    mainResponse.end(`<h1>ERROR</h1><h2>${error}</h2><h3><a href="mailto:josh.madakor@gmail.com">Notify Admin</a></h3>`);
+                    return;
+                }
                 console.log(response.body);
             });
     })
@@ -235,16 +271,16 @@ module.exports = function (app) {
         //renderPage(response,"submitDef");
         //console.log(request.body);
         console.log(replace_Spaces_With_Underscores(mainRequest.body.term))
-        console.log(`${esUrl}:${esPort}/translations/x`);
+        console.log(`${esUrl}:${esPort}/${translationType}/x`);
 
 
         esRequest({
-            url: `${esUrl}:${esPort}/translations/x`,
+            url: `${esUrl}:${esPort}/${translationType}/x`,
             method: 'POST',
             contentType: "application/json",
             json: {
-                "destinationLanguage": "japanese",
-                "sourceLanguage": "english",
+                "sourceLanguage": mainRequest.body.sourceLanguage,
+                "destinationLanguage": mainRequest.body.destinationLanguage,
                 "question": mainRequest.body.term,
                 "submitter": mainRequest.body.author,
                 "answers": [
@@ -266,6 +302,12 @@ module.exports = function (app) {
         },
             
             function (request, response) {
+                if (response.body.error) {
+                    let error = JSON.stringify(response.body.error.root_cause[0].type);
+                    console.log('there was an error.');
+                    mainResponse.end(`<h1>ERROR</h1><h2>${error}</h2><h3><a href="mailto:josh.madakor@gmail.com">Notify Admin</a></h3>`);
+                    return;
+                }
                 let result = response.body;
                 console.log('----------------------------------------');
                 console.log(result);
@@ -308,7 +350,13 @@ module.exports = function (app) {
             searchTerm = `${mainRequest.body.question}`.toLowerCase();
         }
 
-        if (searchTerm.indexOf(" ") > 0) {
+        var non_English_Regex = /([^\x00 -\x7F]+)/g;
+        console.log('-------------------------- DOES IT MATCH? ----------------------------');
+        console.log();
+        console.log('-------------------------- DOES IT MATCH? ----------------------------');
+
+        if (searchTerm.indexOf(" ") > 0 || (searchTerm.match(non_English_Regex) !== null)) {
+            //if (searchTerm.length > 0) {
             // If the search term has a space in it, use Query --> Match
             esRequest({
                 url: `${esUrl}:${esPort}/${translationType}/_search`,
@@ -321,7 +369,12 @@ module.exports = function (app) {
                 }
             },
                 function (request, response) {
-
+                    if (response.body.error) {
+                        let error = JSON.stringify(response.body.error.root_cause[0].type);
+                        console.log('there was an error.');
+                        mainResponse.end(`<h1>ERROR</h1><h2>${error}</h2><h3><a href="mailto:josh.madakor@gmail.com">Notify Admin</a></h3>`);
+                        return;
+                    }
                     let count = 0;
                     let wordToBePushedIntoAutocompleteResults = "";
                     let translationToBePushedIntoAutocompleteResults = ""
@@ -362,7 +415,12 @@ module.exports = function (app) {
                 }
             },
                 function (request, response) {
-
+                    if (response.body.error) {
+                        let error = JSON.stringify(response.body.error.root_cause[0].type);
+                        console.log('there was an error.');
+                        mainResponse.end(`<h1>ERROR</h1><h2>${error}</h2><h3><a href="mailto:josh.madakor@gmail.com">Notify Admin</a></h3>`);
+                        return;
+                    }
                     let count = 0;
                     let wordToBePushedIntoAutocompleteResults = "";
                     let translationToBePushedIntoAutocompleteResults = ""
@@ -418,7 +476,12 @@ module.exports = function (app) {
             method: 'GET',
             json: { "query": { "match": { "question": targetWord } } }
         }, function (request, response) {
-
+            if (response.body.error) {
+                let error = JSON.stringify(response.body.error.root_cause[0].type);
+                console.log('there was an error.');
+                mainResponse.end(`<h1>ERROR</h1><h2>${error}</h2><h3><a href="mailto:josh.madakor@gmail.com">Notify Admin</a></h3>`);
+                return;
+            }
             let sourceLanguage = null;
             let destinationLanguage = null;
             let question = null;
@@ -426,6 +489,7 @@ module.exports = function (app) {
             let tags = null;
             let requester = null;
             let bounty = null;
+            let id = [];
 
             sourceLanguage = response.body.hits.hits[0]._source.sourceLanguage;
             destinationLanguage = response.body.hits.hits[0]._source.destinationLanguage;
@@ -434,6 +498,7 @@ module.exports = function (app) {
             details = response.body.hits.hits[0]._source.details;
             tags = response.body.hits.hits[0]._source.tags;
             requester = response.body.hits.hits[0]._source.requester;
+            id = response.body.hits.hits[0]._source.id
 
             mainResponse.render("answer", {
                 sourceLanguage: sourceLanguage,
@@ -443,7 +508,8 @@ module.exports = function (app) {
                 details: details,
                 tags: tags,
                 requester: requester,
-                targetWord: targetWord
+                targetWord: targetWord,
+                id: id
             });
         });
     });

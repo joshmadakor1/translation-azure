@@ -9,13 +9,21 @@
                 </form>
             </div>
         <div class="definitionSpace">
+		<p>From:<br><select id="sourceLanguage">
+                    <option value="English">🇺🇸 English</option>
+                    <option value="Japanese">🇯🇵 Japanese</option>
+                  </select></p>
 
+            <p>To<br><select id="destinationLanguage">
+                    <option value="Japanese">🇯🇵 Japanese</option>
+                    <option value="English">🇺🇸 English</option>
+                  </select></p>
             <p><sub>Ex: Cat</sub><input id="term" placeholder="Type your word or phrase to define here..."></p>
-            <p><sub>Ex: neko,ねこ,猫</sub><textarea id="WordTranslation" placeholder="Translation goes here..."></textarea></p>
+            <p><sub>Ex:<br/>neko<br/>ねこ<br/>猫</sub><textarea id="WordTranslation" placeholder="Translations go here..."></textarea></p>
             <p><sub>Click 'record' to record the word!</sub><br /><button id="startRecordingWord" onclick="startRecording(this);">record</button>
                 <button id="stopRecordingWord" onclick="stopRecording(this);" disabled>stop</button>
                 <ul id="recordingslist"></ul></p>
-            <p><sub>Ex: Ah! There is a cat!, あ！ねこがいますよ！, あ！猫がいますよ！</sub><textarea id="SentenceTranslation" placeholder="Example sentence goes here..."></textarea></p></p>
+            <p><sub>Ex: <br/>Ah! There is a cat!<br/>あ！ねこがいますよ！<br/>あ！猫がいますよ！</sub><textarea id="SentenceTranslation" placeholder="Example sentences go here..."></textarea></p></p>
             <p><sub>Click 'record' to record the example sentence!<br />
             <button id="startRecordingSentence" onclick="startRecording2(this);">record</button>
 

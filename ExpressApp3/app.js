@@ -64,3 +64,8 @@ function uuidFromBytes(rnd) {
     rnd.shift();
     return rnd.join('-');
 }
+
+/*
+ * TODO: render notes and tags in definitions page
+ * 
+ */
