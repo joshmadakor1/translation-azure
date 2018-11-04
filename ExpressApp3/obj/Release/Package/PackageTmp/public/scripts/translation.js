@@ -105,6 +105,19 @@ $(document).ready(function(){
 
 
     $('#submitWord').unbind("click").click(function () {
+        let sourceLanguage = document.getElementById("sourceLanguage").value;
+        let destinationLanguage = document.getElementById("destinationLanguage").value;
+
+        if (sourceLanguage === destinationLanguage) {
+            alert("Source language and destination language cannot be the same.");
+            return;
+        }
+
+        if (document.getElementById("audiolink1") === null || document.getElementById("audiolink2") === null) {
+            alert("You must submit audio recordings.");
+            return;
+        }
+        
         let term = document.getElementById("term").value;
         if (term === undefined) {
           term = document.getElementById("term").innerHTML;
@@ -118,6 +131,8 @@ $(document).ready(function(){
         let author = document.getElementById("author").value;
         let audioWord = document.getElementById("audiolink1").download;
         let audioSentence = document.getElementById("audiolink2").download;
+        
+
         //console.log(term);
         let translationSubmission = {
             term: term,
@@ -127,7 +142,9 @@ $(document).ready(function(){
             tags: tags,
             author: author,
             audioWord: audioWord,
-            audioSentence: audioSentence
+            audioSentence: audioSentence,
+            sourceLanguage: sourceLanguage,
+            destinationLanguage: destinationLanguage
         }
 
         if (validate_Json_Submission(translationSubmission)) {
@@ -139,12 +156,12 @@ $(document).ready(function(){
                 data: JSON.stringify(translationSubmission),
                 dataType: "text",
                 success: function(data){
-                  console.log('hello0');
+                  console.log('Post Success!');
                   let newUrl = window.location.protocol + "//" + window.location.host + "/";
                   window.location.href = newUrl;
                 },
-                error: function() {
-                  console.log("kkkk");
+                error: function(error) {
+                  console.log("Post Error!\n" + error);
                 },
                 complete: function (textStatus, errorThrown) {
                   console.log('penis');
@@ -154,9 +171,8 @@ $(document).ready(function(){
         }
         else {
             alert("make sure to fill in all the fields");
+            return;
         }
-
-
     });
 
     $('#submitAnswer').on('click', function() {
