@@ -68,7 +68,7 @@ $(document).ready(function(){
     $('#submitRequest').unbind("click").click(function () {
         let term = document.getElementById("requestTerm").value;
         let details = document.getElementById("TranslatorNotes").value;
-        let tags = document.getElementById("requestTags").value;
+        //let tags = document.getElementById("requestTags").value;
         let sourceLanguage = document.getElementById("sourceLanguage").value;
         let destinationLanguage = document.getElementById("destinationLanguage").value;
         let requester = document.getElementById("requester").value;
@@ -79,7 +79,6 @@ $(document).ready(function(){
         let requestSubmission = {
             term: term,
             details: details,
-            tags: tags,
             sourceLanguage: sourceLanguage,
             destinationLanguage: destinationLanguage,
             requester: requester,
@@ -94,7 +93,10 @@ $(document).ready(function(){
                 contentType: 'application/json',
                 data: JSON.stringify(requestSubmission),
                 success: function(data){
-                  console.log(data);
+                    console.log(data);
+                    console.log('Post Success!');
+                    let newUrl = window.location.protocol + "//" + window.location.host + "/contribute";
+                    window.location.href = newUrl;
                 }
             });
         }

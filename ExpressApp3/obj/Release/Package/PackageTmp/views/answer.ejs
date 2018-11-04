@@ -23,9 +23,16 @@
           </tr>
         </table>
       </div>
-
+	   
       <div class="definitionSpace">
+		<p>From:<br><select id="sourceLanguage">
+			<option value="English"><%= sourceLanguage %></option>
+			</select></p>
 
+		<p>To<br><select id="destinationLanguage">
+			<option value="Japanese"><%= destinationLanguage %></option>
+			</select></p>
+			<hr>
           <p><sub>Ex: neko,ねこ,猫</sub><textarea id="WordTranslation" placeholder="<%= destinationLanguage %> translation goes here..."></textarea></p>
           <p><sub>Click 'record' to record the word!</sub><br /><button id="startRecordingWord" onclick="startRecording(this);">record</button>
               <button id="stopRecordingWord" onclick="stopRecording(this);" disabled>stop</button>
@@ -41,7 +48,7 @@
           <p><input id="author" placeholder="Enter username" value="joshsmad"></p>
           <p><button class="submitDefinition" id="submitWord">Submit</button></p>
       </div>
-
+	  <p hidden id="hiddenP"><%= id %></p>
       <script src="https://code.jquery.com/jquery-1.12.4.js" integrity="sha256-Qw82+bXyGq6MydymqBxNPYTaUXXq7c8v3CwiYwLLNXU=" crossorigin="anonymous"></script>
       <script src="/scripts/translation.js"></script>
       <script src="/scripts/recorderFrontend.js"></script>

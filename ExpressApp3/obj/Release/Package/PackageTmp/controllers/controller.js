@@ -118,6 +118,7 @@ module.exports = function (app) {
                 let downvotes = [];
                 let id = [];
                 let tags = [];
+                let notes = [];
                 
                 try {
                     definitionArray = response.body.hits.hits[0]._source.answers
@@ -135,6 +136,7 @@ module.exports = function (app) {
                     downvotes.push(response.body.hits.hits[count]._source.answers[0].definition.downvotes);
                     tags.push(response.body.hits.hits[count]._source.answers[0].definition.tags);
                     id.push(response.body.hits.hits[count]._id);
+                    notes.push(response.body.hits.hits[count]._source.answers[0].definition.translatorNotes);
                 }
                 
                     
@@ -167,6 +169,7 @@ module.exports = function (app) {
                     sessionID: mainRequest.sessionID,
                     matches: jsonObject.matches,
                     tags: tags,
+                    notes: notes,
                     id: id
                 });
             })
@@ -269,10 +272,9 @@ module.exports = function (app) {
     app.post('/submitDef', function (mainRequest, mainResponse) {
         console.log('post /submitDef')
         //renderPage(response,"submitDef");
-        //console.log(request.body);
-        console.log(replace_Spaces_With_Underscores(mainRequest.body.term))
+        //console.log(replace_Spaces_With_Underscores(mainRequest.body.term))
         console.log(`${esUrl}:${esPort}/${translationType}/x`);
-
+        //console.log(mainRequest.body);
 
         esRequest({
             url: `${esUrl}:${esPort}/${translationType}/x`,
@@ -289,8 +291,8 @@ module.exports = function (app) {
                             "translation": mainRequest.body.wordTranslation,
                             "exampleSentence": mainRequest.body.sentenceTranslation,
                             "author": mainRequest.body.author,
-                            "upvotes": 22,
-                            "downvotes": 3,
+                            "upvotes": 0,
+                            "downvotes": 0,
                             "audioWord": mainRequest.body.audioWord,
                             "audioSentence": mainRequest.body.audioSentence,
                             "translatorNotes": mainRequest.body.translatorNotes,
@@ -308,16 +310,15 @@ module.exports = function (app) {
                     mainResponse.end(`<h1>ERROR</h1><h2>${error}</h2><h3><a href="mailto:josh.madakor@gmail.com">Notify Admin</a></h3>`);
                     return;
                 }
-                let result = response.body;
-                console.log('----------------------------------------');
+                let result = response.body.result;
+                console.log("result ------------------------------");
                 console.log(result);
-                mainResponse.sendStatus(200);
-                /*
+                
                 if (result === "updated" || result === "created") {
                     console.log(replace_Spaces_With_Underscores(mainRequest.body.term));
                     //If Elasticsearch could update/add the record, send a success status
                     esRequest({
-                        url: `${esUrl}:${esPort}/requests/x/${id}`,
+                        url: `${esUrl}:${esPort}/requests/x/${mainRequest.body.id}`,
                         method: 'DELETE'
                     },
                         function (request, response) {
@@ -329,7 +330,7 @@ module.exports = function (app) {
                     //If Elasticsearch failed to update/add the record, send a failure status
                     mainResponse.sendStatus(500)
                 }
-                */
+                
             });
 
     });
@@ -350,10 +351,9 @@ module.exports = function (app) {
             searchTerm = `${mainRequest.body.question}`.toLowerCase();
         }
 
+        //This is to determine if it is a non-ascii character (japanese, for example)
         var non_English_Regex = /([^\x00 -\x7F]+)/g;
-        console.log('-------------------------- DOES IT MATCH? ----------------------------');
-        console.log();
-        console.log('-------------------------- DOES IT MATCH? ----------------------------');
+  
 
         if (searchTerm.indexOf(" ") > 0 || (searchTerm.match(non_English_Regex) !== null)) {
             //if (searchTerm.length > 0) {
@@ -469,12 +469,13 @@ module.exports = function (app) {
     });
 
     app.get('/answer', function (mainRequest, mainResponse) {
-        let targetWord = mainRequest.query.word;
+        //let targetWord = mainRequest.query.word;
+        let targetId = mainRequest.query._id;
 
         esRequest({
             url: `${esUrl}:${esPort}/requests/_search`,
             method: 'GET',
-            json: { "query": { "match": { "question": targetWord } } }
+            json: { "query": { "match": { "_id": targetId } } }
         }, function (request, response) {
             if (response.body.error) {
                 let error = JSON.stringify(response.body.error.root_cause[0].type);
@@ -498,8 +499,8 @@ module.exports = function (app) {
             details = response.body.hits.hits[0]._source.details;
             tags = response.body.hits.hits[0]._source.tags;
             requester = response.body.hits.hits[0]._source.requester;
-            id = response.body.hits.hits[0]._source.id
-
+            id = targetId
+            console.log(targetId);
             mainResponse.render("answer", {
                 sourceLanguage: sourceLanguage,
                 destinationLanguage: destinationLanguage,
@@ -508,8 +509,8 @@ module.exports = function (app) {
                 details: details,
                 tags: tags,
                 requester: requester,
-                targetWord: targetWord,
-                id: id
+                targetWord: question,
+                id: targetId
             });
         });
     });

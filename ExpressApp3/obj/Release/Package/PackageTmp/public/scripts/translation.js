@@ -65,14 +65,14 @@ $(document).ready(function(){
     }
 
 
-    $('#submitRequest').on('click', function() {
+    $('#submitRequest').unbind("click").click(function () {
         let term = document.getElementById("requestTerm").value;
         let details = document.getElementById("TranslatorNotes").value;
         let tags = document.getElementById("requestTags").value;
         let sourceLanguage = document.getElementById("sourceLanguage").value;
         let destinationLanguage = document.getElementById("destinationLanguage").value;
         let requester = document.getElementById("requester").value;
-        let bounty = document.getElementById("bounty").value;
+        //let bounty = document.getElementById("bounty").value;
 
         console.log(`${sourceLanguage}\n${destinationLanguage}\n${requester}`);
 
@@ -83,7 +83,7 @@ $(document).ready(function(){
             sourceLanguage: sourceLanguage,
             destinationLanguage: destinationLanguage,
             requester: requester,
-            bounty: bounty
+            bounty: 0.00
         }
 
         if (validate_Json_Submission(requestSubmission)) {
@@ -131,6 +131,14 @@ $(document).ready(function(){
         let author = document.getElementById("author").value;
         let audioWord = document.getElementById("audiolink1").download;
         let audioSentence = document.getElementById("audiolink2").download;
+        let id = null;
+
+        try {
+            id = document.getElementById("hiddenP").innerHTML;
+        }
+        catch (error) {
+            console.log(error);
+        }
         
 
         //console.log(term);
@@ -144,7 +152,8 @@ $(document).ready(function(){
             audioWord: audioWord,
             audioSentence: audioSentence,
             sourceLanguage: sourceLanguage,
-            destinationLanguage: destinationLanguage
+            destinationLanguage: destinationLanguage,
+            id: id
         }
 
         if (validate_Json_Submission(translationSubmission)) {

@@ -68,6 +68,7 @@ module.exports = function (app) {
                 details[count] = response.body.hits.hits[count]._source.details;
                 tags[count] = response.body.hits.hits[count]._source.tags;
                 requester[count] = response.body.hits.hits[count]._source.requester;
+                details[count] = response.body.hits.hits[count]._source.details;
                 bounty[count] = response.body.hits.hits[count]._source.bounty;
                 id[count] = response.body.hits.hits[count]._id;
             }
@@ -253,14 +254,17 @@ module.exports = function (app) {
                 "bounty": request.body.bounty
             }
         },
-            function (request, response) {
-                if (response.body.error) {
-                    let error = JSON.stringify(response.body.error.root_cause[0].type);
+            function (req, res) {
+                if (res.body.error) {
+                    let error = JSON.stringify(res.body.error.root_cause[0].type);
                     console.log('there was an error.');
                     mainResponse.end(`<h1>ERROR</h1><h2>${error}</h2><h3><a href="mailto:josh.madakor@gmail.com">Notify Admin</a></h3>`);
+                    response.sendStatus(500);
                     return;
                 }
-                console.log(response.body);
+                response.sendStatus(200);
+                console.log(res.body);
+                return;
             });
     })
 

@@ -66,6 +66,10 @@ function uuidFromBytes(rnd) {
 }
 
 /*
- * TODO: render notes and tags in definitions page
+ * TODO: 
+ * Add login capability
+ * Do something after Request has been successfully posted
+ * Fix voting system (research how)
+ * 
  * 
  */

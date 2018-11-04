@@ -9,26 +9,26 @@
                 <form autocomplete="off">
                 </form>
             </div>
-        <div class="definitionSpace">
-
-            <p>From:<br><select id="sourceLanguage">
-                    <option value="English">🇺🇸 English</option>
-                    <option value="Japanese">🇯🇵 Japanese</option>
-                  </select></p>
-
-            <p>To<br><select id="destinationLanguage">
-                    <option value="Japanese">🇯🇵 Japanese</option>
-                    <option value="English">🇺🇸 English</option>
-                  </select></p>
-
-            <p><sub>Type the word or phrase you want translated here...</sub><input id="requestTerm" placeholder="Ex: Hey Susan, that hat looks really good on you!"></p>
-            <p><sub>Describe the context the word/phrase to better help provide a translation...</sub><input id="TranslatorNotes" placeholder="Ex: Said while complimenting my younger sister."></p>
-            <p><sub>Enter tags here, separated by commas. Example: food, shopping, slang, formal</sub><input id="requestTags" placeholder="Ex: greetings, romance, food, slang, animal"></p>
-            <!--<p><sub>Bounty: How much do you want to pay for this translation?</sub><input id="bounty" value="$0.00"></p>-->
-            <p><sub>Requester</sub><input id="requester" value="joshsmad"></p>
-            <p><button class="submitDefinition" id="submitRequest">Submit</button></p>
-
-        </div>
+            <div class="definitionSpace">
+                <p>
+                    From:<br><select id="sourceLanguage">
+                        <option value="English">English</option>
+                        <option value="Japanese">Japanese</option>
+                    </select>
+                </p>
+                <p>
+                    To<br><select id="destinationLanguage">
+                        <option value="Japanese">Japanese</option>
+                        <option value="English">English</option>
+                    </select>
+                </p>
+                <p><sub>Type the word or phrase you want translated here...</sub><input id="requestTerm" placeholder="Ex: Hey Susan, that hat looks really good on you!"></p>
+                <p><sub>Describe the context the word/phrase to better help provide a translation...</sub><input id="TranslatorNotes" placeholder="Ex: Said while complimenting my younger sister."></p>
+                <!--<p><sub>Enter tags here, separated by commas. Example: food, shopping, slang, formal</sub><input id="requestTags" placeholder="Ex: greetings, romance, food, slang, animal"></p>-->
+    <!--<p><sub>Bounty: How much do you want to pay for this translation?</sub><input id="bounty" value="$0.00"></p>-->
+                <p><sub>Requester</sub><input id="requester" value="joshsmad"></p>
+                <p><button class="submitDefinition" id="submitRequest">Submit</button></p>
+            </div>
         <script src="https://code.jquery.com/jquery-1.12.4.js" integrity="sha256-Qw82+bXyGq6MydymqBxNPYTaUXXq7c8v3CwiYwLLNXU=" crossorigin="anonymous"></script>
         <script src="/scripts/translation.js"></script>
         <script src="/scripts/recorderFrontend.js"></script>
