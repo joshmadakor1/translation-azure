@@ -80,7 +80,8 @@ module.exports = function (app) {
                 tags: tags,
                 requester: requester,
                 bounty: bounty,
-                id: id
+                id: id,
+                user: mainRequest.user
             });
         });
     });
@@ -171,23 +172,14 @@ module.exports = function (app) {
                     matches: jsonObject.matches,
                     tags: tags,
                     notes: notes,
-                    id: id
+                    id: id,
+                    user: mainRequest.user
                 });
             })
 
         }
         else {
-            try {
-                // if the search matches have been inserted into request.message
-                console.log('user searching for word');
-                let jsonObject = JSON.parse(mainRequest.session.message);
-                mainResponse.render("index", {
-                    sessionID: mainRequest.sessionID,
-                    matches: jsonObject.matches,
-                    numberOfTranslations: 0
-                })
-            }
-            catch (error) {
+            
                 // First time the page has load, or no search matches have been inserted into request.message
                 console.log('first time page has loaded');
 
@@ -229,12 +221,14 @@ module.exports = function (app) {
                     console.log(`${targetWord}`);
                     mainResponse.redirect(`/?word=${targetWord}`);
                 });
-            }
+            
         }
     });
 
     app.get('/request', function (request, response) {
-        response.render("request");
+        response.render("request", {
+            user: request.user
+        });
     });
 
     app.post('/request', function (request, response) {
@@ -270,7 +264,9 @@ module.exports = function (app) {
 
     app.get('/add', function (request, response) {
         console.log(`--> get /add`)
-        response.render('add')
+        response.render('add', {
+            user: request.user
+        })
     });
 
     app.post('/submitDef', function (mainRequest, mainResponse) {
@@ -399,7 +395,8 @@ module.exports = function (app) {
                     mainResponse.render('index', {
                         sessionID: mainRequest.sessionID,
                         matches: searchMatches,
-                        numberOfTranslations: 0
+                        numberOfTranslations: 0,
+                        user: mainRequest.user
                     });
                 });
 
@@ -447,7 +444,8 @@ module.exports = function (app) {
                     mainResponse.render('index', {
                         sessionID: mainRequest.sessionID,
                         matches: searchMatches,
-                        numberOfTranslations: 0
+                        numberOfTranslations: 0,
+                        user: mainRequest.user
                     });
                 });
         }
@@ -514,7 +512,8 @@ module.exports = function (app) {
                 tags: tags,
                 requester: requester,
                 targetWord: question,
-                id: targetId
+                id: targetId,
+                user: mainRequest.user
             });
         });
     });

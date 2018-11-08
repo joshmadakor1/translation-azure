@@ -1,14 +1,19 @@
 <header>
         <div class="container">
-            <div><a class="logo" href="/">YEET</a></div>
+            <div><a class="logo" href="/">
+                <font size="15">How can I say...</font></a>
+            </div>
             <nav>
                 <ul>
-                     <li><a href="/">Search</a></li>
+                    <li><a href="/">Search</a></li>
                     <li><a href="/add">Add</a></li>
                     <li><a href="/request">Request</a></li>
-                    <li><a href="/earn">Earn $</a></li>
-                    <li>Vote</li>
-                    <li>Data</li>
+                    <li><a href="/earn">Contribute</a></li>
+                    <% if (!user) { %>
+                    <li><a href="/auth/login">Login</a></li>
+                    <% } else { %>
+                    <li><a href="/auth/logout">Logout</a></li>
+                    <% } %>
                 </ul>
             </nav>
             <br>

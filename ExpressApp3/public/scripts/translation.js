@@ -95,7 +95,7 @@ $(document).ready(function(){
                 success: function(data){
                     console.log(data);
                     console.log('Post Success!');
-                    let newUrl = window.location.protocol + "//" + window.location.host + "/contribute";
+                    let newUrl = window.location.protocol + "//" + window.location.host + "/earn";
                     window.location.href = newUrl;
                 }
             });

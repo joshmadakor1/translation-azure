@@ -9,13 +9,45 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var routes = require('./routes/index');
+const keys = require('./config/keys')
+const authRoutes  = require('./routes/auth-routes');
+const indexRoutes = require('./routes/index');
+const passportSetup = require('./config/passport-setup');
+const mongoose = require('mongoose');
+const cookieSession = require('cookie-session');
+const passport = require('passport');
 
 var app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
+
+// Setup Cookies
+app.use(cookieSession({
+    maxAge: 24 * 60 * 60 * 1000,
+    keys : [keys.session.cookieKey]
+}))
+
+// Initialize Passport and Cookies
+app.use(passport.initialize());
+app.use(passport.session());
+
+// Connect to mongodb
+mongoose.connect(keys.mongodb.dbURI, {
+    useNewUrlParser: true,
+    auth: {
+        user: keys.mongodb.username,
+        password: keys.mongodb.password,
+    }}, function (err, db) {
+        if (err) throw err;
+        console.log('Connected to MongoDB');
+    }
+);
+
+// setup routes
+app.use('/auth', authRoutes);
+
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(__dirname + '/public/favicon.ico'));
@@ -32,7 +64,7 @@ app.use(session({
     genid: function (request) {
         return genuuid()
     },
-    secret: '123',
+    secret: keys.session.key,
     saveUninitialized: true,
     resave: false,
     cookie:

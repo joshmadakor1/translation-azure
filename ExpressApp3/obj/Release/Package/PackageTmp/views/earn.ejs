@@ -10,20 +10,21 @@
         <div class="definitionSpace">
 
             <table>
-              <tr>
-
-                <td width="50%"><h2>Word/Phrase</h2> </td>
-                <td width="20%"><h2>From</h2>        </td>
-                <td width="20%"><h2>To</h2>          </td>
-                <td width="10%"><h2>Payout</h2>      </td>
-            </tr>
+                <tr>
+                    <td width="40%"><font size="5">Word/Phrase</font> </td>
+                    <td width="15%"><font size="5">From  </font>      </td>
+                    <td width="15%"><font size="5">To   </font>        </td>
+                    <td width="20%"><font size="5">Notes   </font>        </td>
+                    <td width="10%"><font size="5">Payout </font>     </td>
+                </tr>
             <% for (let i = 0; i < question.length; i++) { %>
-              <tr>
-                <td width="50%"><a href="/answer/?_id=<%= id[i] %>"><%= question[i] %></a></td>
-                <td width="20%"><%= sourceLanguage[i] %>      </td>
-                <td width="20%"><%= destinationLanguage[i] %> </td>
-                <td width="10%">$<%= bounty[i] %>              </td>
-              </tr>
+                <tr>
+                    <td width="40%"><a href="/answer/?_id=<%= id[i] %>"><%= question[i] %></a></td>
+                    <td width="15%"><%= sourceLanguage[i] %>      </td>
+                    <td width="15%"><%= destinationLanguage[i] %> </td>
+                    <td width="15%"><%= details[i] %> </td>
+                    <td width="10%">$<%= bounty[i] %>              </td>
+                </tr>
             <% } %>
 
             </table>

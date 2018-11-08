@@ -68,6 +68,7 @@ module.exports = function (app) {
                 details[count] = response.body.hits.hits[count]._source.details;
                 tags[count] = response.body.hits.hits[count]._source.tags;
                 requester[count] = response.body.hits.hits[count]._source.requester;
+                details[count] = response.body.hits.hits[count]._source.details;
                 bounty[count] = response.body.hits.hits[count]._source.bounty;
                 id[count] = response.body.hits.hits[count]._id;
             }
@@ -79,7 +80,8 @@ module.exports = function (app) {
                 tags: tags,
                 requester: requester,
                 bounty: bounty,
-                id: id
+                id: id,
+                user: mainRequest.user
             });
         });
     });
@@ -170,23 +172,14 @@ module.exports = function (app) {
                     matches: jsonObject.matches,
                     tags: tags,
                     notes: notes,
-                    id: id
+                    id: id,
+                    user: mainRequest.user
                 });
             })
 
         }
         else {
-            try {
-                // if the search matches have been inserted into request.message
-                console.log('user searching for word');
-                let jsonObject = JSON.parse(mainRequest.session.message);
-                mainResponse.render("index", {
-                    sessionID: mainRequest.sessionID,
-                    matches: jsonObject.matches,
-                    numberOfTranslations: 0
-                })
-            }
-            catch (error) {
+            
                 // First time the page has load, or no search matches have been inserted into request.message
                 console.log('first time page has loaded');
 
@@ -228,12 +221,14 @@ module.exports = function (app) {
                     console.log(`${targetWord}`);
                     mainResponse.redirect(`/?word=${targetWord}`);
                 });
-            }
+            
         }
     });
 
     app.get('/request', function (request, response) {
-        response.render("request");
+        response.render("request", {
+            user: request.user
+        });
     });
 
     app.post('/request', function (request, response) {
@@ -253,20 +248,25 @@ module.exports = function (app) {
                 "bounty": request.body.bounty
             }
         },
-            function (request, response) {
-                if (response.body.error) {
-                    let error = JSON.stringify(response.body.error.root_cause[0].type);
+            function (req, res) {
+                if (res.body.error) {
+                    let error = JSON.stringify(res.body.error.root_cause[0].type);
                     console.log('there was an error.');
                     mainResponse.end(`<h1>ERROR</h1><h2>${error}</h2><h3><a href="mailto:josh.madakor@gmail.com">Notify Admin</a></h3>`);
+                    response.sendStatus(500);
                     return;
                 }
-                console.log(response.body);
+                response.sendStatus(200);
+                console.log(res.body);
+                return;
             });
     })
 
     app.get('/add', function (request, response) {
         console.log(`--> get /add`)
-        response.render('add')
+        response.render('add', {
+            user: request.user
+        })
     });
 
     app.post('/submitDef', function (mainRequest, mainResponse) {
@@ -395,7 +395,8 @@ module.exports = function (app) {
                     mainResponse.render('index', {
                         sessionID: mainRequest.sessionID,
                         matches: searchMatches,
-                        numberOfTranslations: 0
+                        numberOfTranslations: 0,
+                        user: mainRequest.user
                     });
                 });
 
@@ -443,7 +444,8 @@ module.exports = function (app) {
                     mainResponse.render('index', {
                         sessionID: mainRequest.sessionID,
                         matches: searchMatches,
-                        numberOfTranslations: 0
+                        numberOfTranslations: 0,
+                        user: mainRequest.user
                     });
                 });
         }
@@ -510,7 +512,8 @@ module.exports = function (app) {
                 tags: tags,
                 requester: requester,
                 targetWord: question,
-                id: targetId
+                id: targetId,
+                user: mainRequest.user
             });
         });
     });

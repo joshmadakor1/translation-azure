@@ -5,7 +5,7 @@
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
     <Name>ExpressApp3</Name>
     <RootNamespace>ExpressApp3</RootNamespace>
-    <LastActiveSolutionConfig>Debug|Any CPU</LastActiveSolutionConfig>
+    <LastActiveSolutionConfig>Release|Any CPU</LastActiveSolutionConfig>
     <NameOfLastUsedPublishProfile>NodejsWebApp120181101020407 - Web Deploy (2)</NameOfLastUsedPublishProfile>
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
@@ -32,7 +32,19 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="app.js" />
+    <Compile Include="config\JavaScript.js">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="config\passport-setup.js">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="controllers\controller.js">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="config\keys.js">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="models\user-model.js">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="partials\translations.ejs">
@@ -41,6 +53,9 @@
     <Compile Include="public\scripts\recorder.js" />
     <Compile Include="public\scripts\recorderFrontend.js" />
     <Compile Include="public\scripts\translation.js" />
+    <Compile Include="routes\auth-routes.js">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="routes\index.js" />
     <Compile Include="views\index.ejs">
       <SubType>Code</SubType>
@@ -50,6 +65,9 @@
     <Content Include="package.json" />
     <Content Include="partials\autocomplete.ejs" />
     <Content Include="partials\head.ejs" />
+    <Content Include="partials\login-options.ejs">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="partials\nav.ejs" />
     <Content Include="partials\scripts.ejs" />
     <Content Include="public\audio\2018-11-02T00.29.17.237Z.wav" />
@@ -58,15 +76,15 @@
     <Content Include="public\audio\2018-11-02T00.32.48.714Z.wav" />
     <Content Include="public\audio\2018-11-02T00.32.51.915Z.wav" />
     <Content Include="public\audio\2018-11-02T00.32.58.953Z.wav" />
-    <Content Include="public\misc\emojis.txt" />
     <Content Include="public\styles\main.css" />
     <Content Include="README.md" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="controllers\" />
+    <Folder Include="config\" />
+    <Folder Include="models\" />
     <Folder Include="partials\" />
     <Folder Include="public\" />
-    <Folder Include="public\misc\" />
     <Folder Include="public\audio\" />
     <Folder Include="public\scripts\" />
     <Folder Include="public\styles\" />
@@ -78,6 +96,9 @@
     <Content Include="views\answer.ejs" />
     <Content Include="views\define.ejs" />
     <Content Include="views\earn.ejs" />
+    <Content Include="views\login.ejs">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="views\request.ejs" />
     <Content Include="views\search.ejs" />
     <Content Include="Web.config" />
