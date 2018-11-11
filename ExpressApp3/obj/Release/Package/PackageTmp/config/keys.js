@@ -9,8 +9,15 @@
         clientSecret: 'KYhnQO9JHaj0NUWSO-zFzx3r'
     },
     mongodb: {
-        dbURI: 'mongodb://howcanisay.documents.azure.com:10255/googleoathtest?ssl=true',
+        dbURI: 'mongodb://howcanisay.documents.azure.com:10255/howcanisay?ssl=true',
         username: 'howcanisay',
         password: 'Uyd8WE3xRqdhIf33pfGfqbSPnLwlGpJ7NUXpfGPJTl4YmO0G0MvI0DVRatX5jD6NRsHIecSUNJzkezNTqD6MSw=='
+    },
+    elasticSearch: {
+        url: 'http://elastic:H6RaTqymjQLG0YulyFBD@lb-2pkvvdzm5ntzs.centralus.cloudapp.azure.com'
+    },
+    azureBlob: {
+        connectionString: 'DefaultEndpointsProtocol=https;AccountName=hcisstorage;AccountKey=ur/QuaedvdckF+qc89FSfFc9BWbMvi5zMrKQMNUy0RbyJNqFd8earBEQEy48wx8vx6nl3HDBabXZNyAnkcShYA==;EndpointSuffix=core.windows.net'
     }
 }
+//url: 'https://elastic:phwEbiaOAKvULVw8rsfq7VCD@e4ba45ba778443198d78e0d109ed6131.us-west1.gcp.cloud.es.io'

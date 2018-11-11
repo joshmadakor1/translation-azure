@@ -1,8 +1,7 @@
-<div class="search-bar">
-    <div class="container">
-        <form autocomplete="off" class="acForm">
-                
-            <input id="searchInput" class="inputSearch" placeholder="Begin typing a word or phrase. Use (*) for wildcard..." type="text"  autocomplete="new-password" >
+
+        <form autocomplete="off">
+
+            <input id="searchInput" class="inputSearch" placeholder="Begin typing a word or phrase. Use (*) for wildcard..." type="text" autocomplete="new-password">
             <div id="autocomplete-Results" class="x">
                 <ul class="autocomplete-Ul" id="ac-Results">
                     <% if(typeof matches !== 'undefined' && Array.isArray(matches)){ %>
@@ -13,5 +12,3 @@
                 </ul>
             </div>
         </form>
-    </div>
-</div>

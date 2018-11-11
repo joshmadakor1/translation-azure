@@ -25,7 +25,10 @@
     "passport-google-oauth20": "^1.0.0",
     "pug": "^2.0.0-beta6",
     "request": "^2.88.0",
-    "serve-favicon": "^2.3.0"
+    "serve-favicon": "^2.3.0",
+    "azure-storage": "^2.8.0",
+    "dotenv": "^5.0.0",
+    "yargs": "^11.0.0"
   },
   "engines": {
     "node": "~6.10.x"

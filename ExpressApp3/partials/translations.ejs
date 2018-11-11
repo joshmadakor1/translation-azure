@@ -10,7 +10,7 @@
     <% } else { %>
         <p class="indented"><%= translation %></p>
     <% } %>
-	<audio id="audioWord" src="/audio/<%= audioWord[i] %>" ></audio>
+	<audio id="audioWord" src="https://hcisstorage.blob.core.windows.net/translations-audio/<%= audioWord[i] %>" ></audio>
 
     <hr><p><b>Example Sentence:</b></p>
 	<p><button onclick="playSentence()">▶ (Listen Sentence)</button></p>
@@ -23,7 +23,7 @@
         <p class="indented"><%= exampleSentence %></p>
     <% } %>
     
-	<audio id="audioSentence" src="/audio/<%= audioSentence[i] %>" ></audio>
+	<audio id="audioSentence" src="https://hcisstorage.blob.core.windows.net/translations-audio/<%= audioSentence[i] %>" ></audio>
 	
 	<hr><p><b>Translator Notes:</b></p>
     <p class="indented"><%= notes[i] %></p>

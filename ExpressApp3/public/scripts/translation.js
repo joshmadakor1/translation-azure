@@ -130,7 +130,6 @@ $(document).ready(function(){
         //let audioSentence = document.getElementById("audioSentence").value;
         let translatorNotes = document.getElementById("TranslatorNotes").value;
         let tags = document.getElementById("Tags").value;
-        let author = document.getElementById("author").value;
         let audioWord = document.getElementById("audiolink1").download;
         let audioSentence = document.getElementById("audiolink2").download;
         let id = null;
@@ -150,7 +149,6 @@ $(document).ready(function(){
             sentenceTranslation: sentenceTranslation,
             translatorNotes: translatorNotes,
             tags: tags,
-            author: author,
             audioWord: audioWord,
             audioSentence: audioSentence,
             sourceLanguage: sourceLanguage,

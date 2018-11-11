@@ -10,7 +10,8 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 const keys = require('./config/keys')
-const authRoutes  = require('./routes/auth-routes');
+const authRoutes = require('./routes/auth-routes');
+const profileRoutes = require('./routes/profile-routes');
 const indexRoutes = require('./routes/index');
 const passportSetup = require('./config/passport-setup');
 const mongoose = require('mongoose');
@@ -47,6 +48,7 @@ mongoose.connect(keys.mongodb.dbURI, {
 
 // setup routes
 app.use('/auth', authRoutes);
+app.use('/profile', profileRoutes);
 
 
 // uncomment after placing your favicon in /public
@@ -99,9 +101,12 @@ function uuidFromBytes(rnd) {
 
 /*
  * TODO: 
- * Add login capability
+ * Add elasticsearch CRUD form for editing translations
+ * Add indicator for translation type above each translation
+ * Add login capability for Facebook and Twitter
  * Do something after Request has been successfully posted
  * Fix voting system (research how)
+ * Generate a random username for users, allow them to change it in profile page
  * 
  * 
  */

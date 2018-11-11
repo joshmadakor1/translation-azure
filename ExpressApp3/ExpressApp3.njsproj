@@ -5,7 +5,7 @@
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
     <Name>ExpressApp3</Name>
     <RootNamespace>ExpressApp3</RootNamespace>
-    <LastActiveSolutionConfig>Release|Any CPU</LastActiveSolutionConfig>
+    <LastActiveSolutionConfig>Debug|Any CPU</LastActiveSolutionConfig>
     <NameOfLastUsedPublishProfile>NodejsWebApp120181101020407 - Web Deploy (2)</NameOfLastUsedPublishProfile>
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
@@ -57,6 +57,12 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="routes\index.js" />
+    <Compile Include="routes\profile-routes.js">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="routes\translation-routes.js">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="views\index.ejs">
       <SubType>Code</SubType>
     </Compile>
@@ -64,6 +70,9 @@
     <None Include="NodejsWebApp120181101020407 - Web Deploy %282%29.pubxml" />
     <Content Include="package.json" />
     <Content Include="partials\autocomplete.ejs" />
+    <Content Include="partials\footer.ejs">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="partials\head.ejs" />
     <Content Include="partials\login-options.ejs">
       <SubType>Code</SubType>
@@ -96,6 +105,7 @@
     <Content Include="views\answer.ejs" />
     <Content Include="views\define.ejs" />
     <Content Include="views\earn.ejs" />
+    <Content Include="views\profile.ejs" />
     <Content Include="views\login.ejs">
       <SubType>Code</SubType>
     </Content>

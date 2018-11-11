@@ -7,19 +7,35 @@ const AUDIO_LOCATION = "public/audio";
 var upload = multer({ dest: AUDIO_LOCATION});
 var type = upload.single('upl');
 const fs = require('fs');
-
+const keys = require('../config/keys');
 const bodyParser = require('body-parser');
 const esRequest = require('request');
 const urlencodedParser = bodyParser.urlencoded({ extended: false });
 //const esPort = 9200;
 //const esUrl = "http://192.168.1.201";
-const esPort = 9243;
-const esUrl = "https://elastic:phwEbiaOAKvULVw8rsfq7VCD@e4ba45ba778443198d78e0d109ed6131.us-west1.gcp.cloud.es.io";
+const esPort = 9200;
+const esUrl = keys.elasticSearch.url;
 const translationType = "translations"
+const path = require('path');
+const storage = require('azure-storage');
+const blobService = storage.createBlobService(keys.azureBlob.connectionString);
+const containerName = "translations-audio";
 
 module.exports = function (app) {
 
-
+    function uploadLocalFile (containerName, filePath) {
+        return new Promise((resolve, reject) => {
+            const fullPath = path.resolve(filePath);
+            const blobName = path.basename(filePath);
+            blobService.createBlockBlobFromLocalFile(containerName, blobName, fullPath, err => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve({ message: `Local file "${filePath}" is uploaded` });
+                }
+            });
+        });
+    };
 
     function replace_Spaces_With_Underscores(term) {
         if (term !== null)
@@ -89,7 +105,8 @@ module.exports = function (app) {
     app.get('/', function (mainRequest, mainResponse) {
         console.log(`--> get /`);
         let matches = null;
-
+        console.log('#########################################################');
+        console.log(mainRequest.user);
         // If user is clicking a word to see a definition.
         if (mainRequest.query.word !== undefined) {
             let targetWord = mainRequest.query.word;
@@ -181,8 +198,8 @@ module.exports = function (app) {
         else {
             
                 // First time the page has load, or no search matches have been inserted into request.message
-                console.log('first time page has loaded');
-
+            console.log('first time page has loaded');
+            console.log(`${esUrl}:${esPort}/${translationType}/_search`)
                 let requestItem = esRequest({
                     url: `${esUrl}:${esPort}/${translationType}/_search`,
                     method: 'GET',
@@ -196,6 +213,10 @@ module.exports = function (app) {
                     }
                 }, function (request, response) {
                     //load random word for first page load
+                    if (!response) {
+                        mainResponse.end(`<h1>ERROR</h1><h2>Search Enginge Database not found.</h2><h3><a href="mailto:josh.madakor@gmail.com">Notify Admin</a></h3>`);
+                        return;
+                    }
                     if (response.body.error) {
                         let error = JSON.stringify(response.body.error.root_cause[0].type);
                         console.log('there was an error.');
@@ -284,13 +305,13 @@ module.exports = function (app) {
                 "sourceLanguage": mainRequest.body.sourceLanguage,
                 "destinationLanguage": mainRequest.body.destinationLanguage,
                 "question": mainRequest.body.term,
-                "submitter": mainRequest.body.author,
+                "submitter": mainRequest.user.id,
                 "answers": [
                     {
                         "definition": {
                             "translation": mainRequest.body.wordTranslation,
                             "exampleSentence": mainRequest.body.sentenceTranslation,
-                            "author": mainRequest.body.author,
+                            "author": mainRequest.user.id,
                             "upvotes": 0,
                             "downvotes": 0,
                             "audioWord": mainRequest.body.audioWord,
@@ -461,8 +482,14 @@ module.exports = function (app) {
         
         
         fs.rename(`${AUDIO_LOCATION}/${request.file.filename}`, `${AUDIO_LOCATION}/${request.file.originalname}`, function (err) {
-            console.log(err);
-        });
+            if (err) { 
+                console.log(err);
+            }
+            else {
+                
+                uploadLocalFile(containerName,`${AUDIO_LOCATION}/${request.file.originalname}`);
+            }
+        })
         /*
         fs.rename(`${AUDIO_LOCATION}\\${request.file.filename}`, `${AUDIO_LOCATION}\\${request.file.originalname}`, function (err) {
             console.log(err);
@@ -513,7 +540,7 @@ module.exports = function (app) {
                 requester: requester,
                 targetWord: question,
                 id: targetId,
-                user: mainRequest.user
+                user: mainRequest.user.id
             });
         });
     });

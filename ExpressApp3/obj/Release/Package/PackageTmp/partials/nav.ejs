@@ -1,21 +1,25 @@
 <header>
-        <div class="container">
-            <div><a class="logo" href="/">
-                <font size="15">How can I say...</font></a>
+            <div><a class="logo" style="text-decoration:none;" href="/">
+                <font size="15" >How can I say...</font></a>
             </div>
             <nav>
-                <ul>
+                <ul >
                     <li><a href="/">Search</a></li>
                     <li><a href="/add">Add</a></li>
                     <li><a href="/request">Request</a></li>
                     <li><a href="/earn">Contribute</a></li>
-                    <% if (!user) { %>
-                    <li><a href="/auth/login">Login</a></li>
-                    <% } else { %>
-                    <li><a href="/auth/logout">Logout</a></li>
-                    <% } %>
+                    
                 </ul>
             </nav>
             <br>
-        </div>
+            <div>
+                <ul class="login-logout" >
+                    <% if (!user) { %>
+                    <a href="/auth/login" style="color: #FFEABF;text-decoration: none;text-transform: uppercase;font-size: 16px;">Login </a>
+                    <% } else { %>
+                    <a href="/profile" style="color: #FFEABF;text-decoration: none;text-transform: uppercase;font-size: 16px;">Profile</a> -
+                    <a href="/auth/logout" style="color: #FFEABF;text-decoration: none;text-transform: uppercase;font-size: 16px;">Logout</a>
+                    <% } %>
+                </ul>
+            </div>
 </header>

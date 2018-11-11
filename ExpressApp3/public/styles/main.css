@@ -20,15 +20,64 @@ body {
     text-decoration: none;
     font-size: 18px;
     padding: 10px;
+    display: block;
+    width: 250px;
     background: #ff5353;
+    margin: 2px;
 }
 .google-btn .google-btn:hover {
     color: white;
     text-decoration: none;
 }
 
+.facebook-btn {
+    color: #fff;
+    text-decoration: none;
+    font-size: 18px;
+    padding: 10px;
+    display: block;
+    width: 250px;
+    background: #3b5998;
+    margin: 2px;
+}
+
+.facebook-btn .google-btn:hover {
+    color: white;
+    text-decoration: none;
+}
+
+.login-logout {
+    position: absolute;
+    right: 10px;
+    top: 5px;
+     color: #FFEABF;
+     text-decoration: none;
+     text-transform: uppercase;
+     font-size: 16px;
+}
+
+.twitter-btn {
+    color: #fff;
+    text-decoration: none;
+    font-size: 18px;
+    padding: 10px;
+    display: block;
+    width: 250px;
+    background: #1DA1F2;
+    margin: 2px;
+}
+
+.twitter-btn .google-btn:hover {
+    color: white;
+    text-decoration: none;
+}
+
+
+
 
 .autocomplete-Ul {
+    margin-left: 10%;
+    margin-right: 10%;
     position: absolute;
     z-index: 1;
     list-style: none;
@@ -41,9 +90,6 @@ body {
     margin-top: 0px;
 }
 
-.acForm {
-    margin-bottom: 0
-}
 
 .autocomplete-Ul li {
     background-color: white;
@@ -53,13 +99,13 @@ body {
 }
 
 .container {
-    width: 80%;
-    margin: auto;
-    background: #5076B2;
+    
 }
 
 
-
+form {
+    background: #5076B2;
+}
 div.definitionSpace {
     background-color: #e4e4e4;
     width: 80%;
@@ -67,6 +113,7 @@ div.definitionSpace {
     padding: 2px;
     margin-top: 10px;
     margin-left: 10%;
+    margin-right: 10%;
     z-index: 0;
     /*border-radius: 4px;
     border-color: white;
@@ -90,7 +137,9 @@ div.definitionSpace input {
 }
 
 .inputSearch {
-    width: 75%;
+    width: 80%;
+    margin-left: 10%;
+    margin-right: 10%;
     margin-bottom: 10px;
     border-radius: 4px;
     padding: 8px;
@@ -103,10 +152,13 @@ font a {
 }
 header {
     background: #5076B2;
+    padding-left: 10%;
+    padding-right: 10%;
 }
 .search-bar {
     background:#5076B2;
     padding-top: 10px;
+    width: 100%;
 }
 
 header::after {
@@ -126,10 +178,7 @@ input:focus {
 
 a.logo {
     float: left;
-    font-size: 30pt;
-    padding: 10px 0;
     text-decoration: none;
-    z-index: 1;
     color: #FFEABF;
 }
 
@@ -153,13 +202,19 @@ nav ul {
     list-style: none;
     z-index: 0;
 }
+header ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    z-index: 0;
+}
 
  nav li {
      display: inline-block;
      margin-left: 20px;
      padding-top: 25px;
      position: relative;
-    z-index: 0;
+     z-index: 0;
  }
 
 
@@ -171,9 +226,7 @@ nav ul {
      font-size: 16px;
  }
 
- nav a:hover {
-     color: red;
- }
+
 
 /*
  nav a:before {
@@ -189,10 +242,6 @@ nav ul {
  }
 */
 
- nav a:hover::before {
-     width: 100%;
-     vertical-align: top;
- }
 table {
   width: 100%;
 }
