@@ -1,3 +1,63 @@
+.google-btn {
+    color: #fff;
+    text-decoration: none;
+    font-size: 18px;
+    padding: 10px;
+    display: block;
+    width: 250px;
+    background: #ff5353;
+    margin: 2px;
+}
+
+    .google-btn .google-btn:hover {
+        color: white;
+        text-decoration: none;
+    }
+
+.facebook-btn {
+    color: #fff;
+    text-decoration: none;
+    font-size: 18px;
+    padding: 10px;
+    display: block;
+    width: 250px;
+    background: #3b5998;
+    margin: 2px;
+}
+
+    .facebook-btn .google-btn:hover {
+        color: white;
+        text-decoration: none;
+    }
+
+.login-logout {
+    position: absolute;
+    right: 10px;
+    top: 5px;
+    color: #FFEABF;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-size: 16px;
+}
+
+.twitter-btn {
+    color: #fff;
+    text-decoration: none;
+    font-size: 18px;
+    padding: 10px;
+    display: block;
+    width: 250px;
+    background: #1DA1F2;
+    margin: 2px;
+}
+
+    .twitter-btn .google-btn:hover {
+        color: white;
+        text-decoration: none;
+    }
+
+/*
+
 body {
     margin: 0;
     background: white;
@@ -15,66 +75,6 @@ body {
     padding-top: 0;
 }
 
-.google-btn {
-    color: #fff;
-    text-decoration: none;
-    font-size: 18px;
-    padding: 10px;
-    display: block;
-    width: 250px;
-    background: #ff5353;
-    margin: 2px;
-}
-.google-btn .google-btn:hover {
-    color: white;
-    text-decoration: none;
-}
-
-.facebook-btn {
-    color: #fff;
-    text-decoration: none;
-    font-size: 18px;
-    padding: 10px;
-    display: block;
-    width: 250px;
-    background: #3b5998;
-    margin: 2px;
-}
-
-.facebook-btn .google-btn:hover {
-    color: white;
-    text-decoration: none;
-}
-
-.login-logout {
-    position: absolute;
-    right: 10px;
-    top: 5px;
-     color: #FFEABF;
-     text-decoration: none;
-     text-transform: uppercase;
-     font-size: 16px;
-}
-
-.twitter-btn {
-    color: #fff;
-    text-decoration: none;
-    font-size: 18px;
-    padding: 10px;
-    display: block;
-    width: 250px;
-    background: #1DA1F2;
-    margin: 2px;
-}
-
-.twitter-btn .google-btn:hover {
-    color: white;
-    text-decoration: none;
-}
-
-
-
-
 .autocomplete-Ul {
     margin-left: 10%;
     margin-right: 10%;
@@ -84,7 +84,7 @@ body {
     padding: 0px;
     width: 80%;
     border: 1px solid;
-    /*border-radius: 4px;*/
+    border-radius: 4px;
     border-color: #A5C8FF;
     background-color: white;
     margin-top: 0px;
@@ -115,10 +115,7 @@ div.definitionSpace {
     margin-left: 10%;
     margin-right: 10%;
     z-index: 0;
-    /*border-radius: 4px;
-    border-color: white;
-    border: 1px solid;
-    color: white;*/
+
 }
 
 div.definitionSpace p {
@@ -173,7 +170,6 @@ font.term {
 }
 
 input:focus {
-    /*border-color: #240358*/
 }
 
 a.logo {
@@ -228,20 +224,6 @@ header ul {
 
 
 
-/*
- nav a:before {
-     content: '';
-     display: block;
-     height: 5px;
-     width: 100%;
-     background-color: black;
-     position: absolute;
-     top: 0;
-     width: 0%;
-     transition: all ease-in-out 250ms
- }
-*/
-
 table {
   width: 100%;
 }
@@ -259,7 +241,6 @@ table {
      font-size: 10;
      vertical-align: text-top;
  }
- /* Dropdown Button */
 .dropbtn {
     background-color: #f2f2f2;
     color: #000000;
@@ -273,7 +254,6 @@ table {
     border-width: 1px;
 }
 
-/* The container <div> - needed to position the dropdown content */
 .dropdown {
     position: relative;
     display: inline-block;
@@ -281,7 +261,6 @@ table {
     border-width: 1px;
 }
 
-/* Dropdown Content (Hidden by Default) */
 .dropdown-content {
     display: none;
     position: absolute;
@@ -293,7 +272,6 @@ table {
     border-width: 1px;
 }
 
-/* Links inside the dropdown */
 .dropdown-content a {
     color: black;
     padding: 12px 16px;
@@ -303,13 +281,10 @@ table {
     border-width: 1px;
 }
 
-/* Change color of dropdown links on hover */
 .dropdown-content a:hover {background-color: #ddd;}
 
-/* Show the dropdown menu on hover */
 .dropdown:hover .dropdown-content {display: block;}
 
-/* Change the background color of the dropdown button when the dropdown content is shown */
 .dropdown:hover .dropbtn {
     background-color: #240358;
     color: #ffffff;
@@ -331,3 +306,4 @@ button.submitDefinition {
     width: 100%;
     height: 70px;
 }
+*/

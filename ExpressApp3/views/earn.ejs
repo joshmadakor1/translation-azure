@@ -1,26 +1,26 @@
 <html>
     <% include ../partials/head %>
-<body>
+<body class="bg-light">
     <% include ../partials/scripts %>
     <% include ../partials/nav %>
-    <div class="container">
-        <form autocomplete="off"></form>
+    <div class="container bg-light px-0 my-3 p-3">
+        <font class="display-3">Answer Translation Requests!</font>
     </div>
-    <div class="definitionSpace">
+    <div class="container bg-white px-0 my-3 p-3 border border-secondary">
 
-        <table>
+        <table class="table">
             <tr>
-                <td width="40%"><font size="5">Word/Phrase</font> </td>
                 <td width="15%"><font size="5">From  </font>      </td>
                 <td width="15%"><font size="5">To   </font>        </td>
+                <td width="40%"><font size="5">Word/Phrase</font> </td>
                 <td width="20%"><font size="5">Notes   </font>        </td>
                 <td width="10%"><font size="5">Payout </font>     </td>
             </tr>
             <% for (let i = 0; i < question.length; i++) { %>
             <tr>
-                <td width="40%"><a href="/answer/?_id=<%= id[i] %>"><%= question[i] %></a></td>
                 <td width="15%"><%= sourceLanguage[i] %>      </td>
                 <td width="15%"><%= destinationLanguage[i] %> </td>
+                <td width="40%"><a href="/answer/?_id=<%= id[i] %>"><%= question[i] %></a></td>
                 <td width="15%"><%= details[i] %> </td>
                 <td width="10%">$<%= bounty[i] %>              </td>
             </tr>
@@ -28,8 +28,7 @@
 
         </table>
     </div>
-    <script src="https://code.jquery.com/jquery-1.12.4.js" integrity="sha256-Qw82+bXyGq6MydymqBxNPYTaUXXq7c8v3CwiYwLLNXU=" crossorigin="anonymous"></script>
-    <script src="/scripts/translation.js"></script>
+    <% include ../partials/scripts %>
     <% include ../partials/footer %>
 </body>
 </html>

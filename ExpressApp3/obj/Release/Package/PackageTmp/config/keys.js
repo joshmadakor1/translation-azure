@@ -8,6 +8,12 @@
         clientID: '257808400325-96ngkikvhps282p8edsd71r8d5qvb4c0.apps.googleusercontent.com',
         clientSecret: 'KYhnQO9JHaj0NUWSO-zFzx3r'
     },
+    facebook:
+    {
+        clientID: '747165255649890',
+        clientSecret: '9e5ded7bb05abf00f423ec860fa8a242',
+        callbackURL: '/auth/facebook/callback'
+    },
     mongodb: {
         dbURI: 'mongodb://howcanisay.documents.azure.com:10255/howcanisay?ssl=true',
         username: 'howcanisay',

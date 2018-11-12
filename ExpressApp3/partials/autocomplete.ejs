@@ -1,14 +1,22 @@
 
-        <form autocomplete="off">
-
-            <input id="searchInput" class="inputSearch" placeholder="Begin typing a word or phrase. Use (*) for wildcard..." type="text" autocomplete="new-password">
-            <div id="autocomplete-Results" class="x">
-                <ul class="autocomplete-Ul" id="ac-Results">
-                    <% if(typeof matches !== 'undefined' && Array.isArray(matches)){ %>
-                    <% for(let i = 0; i < matches.length; i++) { %>
-                    <li><font class="autocomplete-Font"><a href="/?word=<%= matches[i] %>"><%= matches[i] %></a></font></li>
-                    <% } %>
-                    <% } else { console.log('matches undefined');}%>
-                </ul>
-            </div>
-        </form>
+    <!--<div class="container">
+        <h1 class="display-1">HowCanISay.com</h1>
+        <p class="lead">Translations </p>
+    </div>-->
+<div class="container bg-light px-0 my-3 p-3">
+    <font class="display-3">Lookup a Word or Phrase!</font>
+</div>
+<div class="container bg-light px-0 my-3 border border-primary">
+    <form autocomplete="off">
+        <input class="border-0 p-3 input-lg" style="width:100%;" id="searchInput" placeholder="Begin typing a word or phrase. Use (*) for wildcard..." type="text" autocomplete="new-password">
+        <div id="autocomplete-Results" class="container bg-info text-align-left px-0 mx-0" >
+            <ul id="ac-Results px-0" class="list-group position-absolute">
+                <% if(typeof matches !== 'undefined' && Array.isArray(matches)){ %>
+                <% for(let i = 0; i < matches.length; i++) { %>
+                <li style="" class="list-group-item"><font><a href="/?word=<%= matches[i] %>"><%= matches[i] %></a></font></li>
+                <% } %>
+                <% } else { console.log('matches undefined');}%>
+            </ul>
+        </div>
+    </form>
+</div>

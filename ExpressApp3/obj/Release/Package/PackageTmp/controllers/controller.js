@@ -4,6 +4,7 @@ const emojis = ["(҂⌣̀_⌣́)", "(҂⌣̀_⌣́)"];
 const ES_MAXIMUM_QUERY_RESULT_SIZE = 25;
 const multer = require('multer');
 const AUDIO_LOCATION = "public/audio";
+const AUDIO_AZURE = "https://hcisstorage.blob.core.windows.net/translations-audio"
 var upload = multer({ dest: AUDIO_LOCATION});
 var type = upload.single('upl');
 const fs = require('fs');
@@ -296,7 +297,6 @@ module.exports = function (app) {
         //console.log(replace_Spaces_With_Underscores(mainRequest.body.term))
         console.log(`${esUrl}:${esPort}/${translationType}/x`);
         //console.log(mainRequest.body);
-
         esRequest({
             url: `${esUrl}:${esPort}/${translationType}/x`,
             method: 'POST',

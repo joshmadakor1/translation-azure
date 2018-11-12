@@ -1,6 +1,6 @@
 ﻿<% for (let i = 0; i < numberOfTranslations; i++) { %>
-<div class="definitionSpace">
-    <p><b><font class="term"><%= targetWord %></font> </b> </p>
+<div class="container bg-white px-0 my-3 p-3 border border-secondary">
+    <p><b><font class="display-4"><%= targetWord %></font> </b> </p>
     <hr><p><b>Word/Phrase: </b> </p> 
 	<p><button onclick="playWord()">▶ (Listen Word)</button></p>
     <% if (Array.isArray(translation[i])) {   %>

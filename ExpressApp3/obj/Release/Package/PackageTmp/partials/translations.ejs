@@ -1,6 +1,6 @@
 ﻿<% for (let i = 0; i < numberOfTranslations; i++) { %>
-<div class="definitionSpace">
-    <p><b><font class="term"><%= targetWord %></font> </b> </p>
+<div class="container bg-white px-0 my-3 p-3 border border-secondary">
+    <p><b><font class="display-4"><%= targetWord %></font> </b> </p>
     <hr><p><b>Word/Phrase: </b> </p> 
 	<p><button onclick="playWord()">▶ (Listen Word)</button></p>
     <% if (Array.isArray(translation[i])) {   %>
@@ -10,7 +10,7 @@
     <% } else { %>
         <p class="indented"><%= translation %></p>
     <% } %>
-	<audio id="audioWord" src="/audio/<%= audioWord[i] %>" ></audio>
+	<audio id="audioWord" src="https://hcisstorage.blob.core.windows.net/translations-audio/<%= audioWord[i] %>" ></audio>
 
     <hr><p><b>Example Sentence:</b></p>
 	<p><button onclick="playSentence()">▶ (Listen Sentence)</button></p>
@@ -23,7 +23,7 @@
         <p class="indented"><%= exampleSentence %></p>
     <% } %>
     
-	<audio id="audioSentence" src="/audio/<%= audioSentence[i] %>" ></audio>
+	<audio id="audioSentence" src="https://hcisstorage.blob.core.windows.net/translations-audio/<%= audioSentence[i] %>" ></audio>
 	
 	<hr><p><b>Translator Notes:</b></p>
     <p class="indented"><%= notes[i] %></p>

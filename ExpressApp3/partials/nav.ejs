@@ -1,25 +1,25 @@
 <header>
-            <div><a class="logo" style="text-decoration:none;" href="/">
-                <font size="15" >How can I say...</font></a>
-            </div>
-            <nav>
-                <ul >
-                    <li><a href="/">Search</a></li>
-                    <li><a href="/add">Add</a></li>
-                    <li><a href="/request">Request</a></li>
-                    <li><a href="/earn">Contribute</a></li>
-                    
-                </ul>
-            </nav>
-            <br>
-            <div>
-                <ul class="login-logout" >
+    <nav class="navbar navbar-expand-sm navbar-light bg-info">
+        <div class="container px-0">
+            <font class="display-1"></font>
+            <button class="navbar-toggler" data-toggle="collapse" data-target="#mainNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="mainNav">
+                <div class="navbar-nav">
+                    <a class="nav-item nav-link lead text-light" href="/">Home</a>
+                    <a class="nav-item nav-link lead text-light" href="/add">Add</a>
+                    <a class="nav-item nav-link lead text-light" href="/request">Request</a>
+                    <a class="nav-item nav-link lead text-light" href="/earn">Contribute</a>
                     <% if (!user) { %>
-                    <a href="/auth/login" style="color: #FFEABF;text-decoration: none;text-transform: uppercase;font-size: 16px;">Login </a>
+                    <a class="nav-item nav-link lead text-light" href="/auth/login">Login </a>
                     <% } else { %>
-                    <a href="/profile" style="color: #FFEABF;text-decoration: none;text-transform: uppercase;font-size: 16px;">Profile</a> -
-                    <a href="/auth/logout" style="color: #FFEABF;text-decoration: none;text-transform: uppercase;font-size: 16px;">Logout</a>
+                    <a class="nav-item nav-link lead text-light" href="/profile">Profile</a>
+                    <a class="nav-item nav-link lead text-light" href="/auth/logout">Logout</a>
                     <% } %>
-                </ul>
+                </div>
             </div>
+        </div>
+    </nav>
+   
 </header>
