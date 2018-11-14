@@ -1,7 +1,7 @@
 ﻿module.exports = {
     session:
     {
-        cookieKey: "zzzzzzzzzzzWOWIJUSTCANNOTBELIEVETHATWOW!z"
+        cookieKey: "zzWOWIJUSTCANNOTBELIEVETHdsfdffffffffATWOW!z"
     },
     google:
     {
@@ -11,19 +11,18 @@
     facebook:
     {
         clientID: '747165255649890',
-        clientSecret: '9e5ded7bb05abf00f423ec860fa8a242',
-        callbackURL: '/auth/facebook/callback'
+        clientSecret: '3088620d5c298654bad317521aa56224',
+        callbackURL: 'https://www.howcanisay.com/auth/facebook/callback'
     },
     mongodb: {
         dbURI: 'mongodb://howcanisay.documents.azure.com:10255/howcanisay?ssl=true',
         username: 'howcanisay',
-        password: 'Uyd8WE3xRqdhIf33pfGfqbSPnLwlGpJ7NUXpfGPJTl4YmO0G0MvI0DVRatX5jD6NRsHIecSUNJzkezNTqD6MSw=='
+        password: 'I3gg8hEUhWyRbW51LyYsitw4RPpHADzhAHVl3ovCWRbZ84kpUnQIff1iiUPDL2xxzkh5URW2MlkkFB8ySReNGg=='
     },
     elasticSearch: {
-        url: 'http://elastic:H6RaTqymjQLG0YulyFBD@lb-2pkvvdzm5ntzs.centralus.cloudapp.azure.com'
+        url: 'http://elastic:1VUfgAlcK619UXR8VfNG@lb-2pkvvdzm5ntzs.centralus.cloudapp.azure.com'
     },
     azureBlob: {
-        connectionString: 'DefaultEndpointsProtocol=https;AccountName=hcisstorage;AccountKey=ur/QuaedvdckF+qc89FSfFc9BWbMvi5zMrKQMNUy0RbyJNqFd8earBEQEy48wx8vx6nl3HDBabXZNyAnkcShYA==;EndpointSuffix=core.windows.net'
+        connectionString: 'DefaultEndpointsProtocol=https;AccountName=hcisstorage;AccountKey=3mSmSv/eDayPYhGyhabe+pA7lZxQmzbqzUusmucIqdj4i4DIlvFSmvtmv466q2dv70quNC4aCcNdbQnUm3ZddA==;EndpointSuffix=core.windows.net'
     }
 }
-//url: 'https://elastic:phwEbiaOAKvULVw8rsfq7VCD@e4ba45ba778443198d78e0d109ed6131.us-west1.gcp.cloud.es.io'

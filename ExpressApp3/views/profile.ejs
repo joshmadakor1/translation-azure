@@ -4,20 +4,64 @@
 <body class="bg-light">
     <% include ../partials/nav %>
     <div class="container bg-light px-0 my-3 p-3">
-        <font class="display-3">Welcome to Your Profile,
-        <% if (user.username.indexOf(" ") > 0) { %>
-        <%= user.username.split(" ")[0] %>
-        <% } else { %>
-        <%= user.username %>
-        <% } %>! </font>
-    </div>
-    <div class="container bg-white px-0 my-3 p-3 border border-secondary">
-        
-        <p>Raw Profile Info:</p>
-        <%= user %>
+        <font class="display-3">
+            Welcome to Your Profile
+            <% if (user.username) {  %>
+            <% if (user.username.indexOf(" ") > 0) { %>
+            <%= user.username.split(" ")[0] %>
+            <% } else { %>
+            <%= user.username %>
+            <% } %>
+            <% } %>
+            <%= user.firstName %>!
+        </font>
+        <font class="text-muted">[edit name]</font>
 
     </div>
     
+    <div class="container bg-white px-0 my-3 p-3 border border-secondary text-muted">
+        <div class="row">
+            <div class="col-md-6 col-lg-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h3 class="card-title">Translations</h3>
+                        <p>Total: <%= numberOfTranslations %> <% if (numberOfTranslations > 0) {%> <a href="/profile/viewtranslations">(view)</a> <% } %></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h3 class="card-title">Active Requests</h3>
+                        <p>Total: <%= numberOfActiveRequests %> <% if (numberOfTranslations > 0) {%> <a href="/profile/viewrequests">(view)</a> <% } %></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h3 class="card-title">Score</h3>
+                        <p><%= upvotes %> Upvotes</p>
+                        <p><%= downvotes %> Downvotes</p>
+                        <p>Score: <%= (upvotes - downvotes) %></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h3 class="card-title">Awards</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!--
+        <p>Raw Profile Info:</p>
+        <%= user %>
+    -->
 
     <% include ../partials/scripts %>
     <% include ../partials/footer %>

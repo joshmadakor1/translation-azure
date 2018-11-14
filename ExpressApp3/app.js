@@ -101,8 +101,9 @@ function uuidFromBytes(rnd) {
 
 /*
  * TODO: 
- * Refresh all credentials in keys file -_-
+ * Refresh  credentials in keys file: google, facebook, 
  * Add elasticsearch CRUD form for editing translations
+ * Add flash messages for login-required redirects
  * Add indicator for translation type above each translation
  * Add login capability for Facebook and Twitter
  * Do something after Request has been successfully posted

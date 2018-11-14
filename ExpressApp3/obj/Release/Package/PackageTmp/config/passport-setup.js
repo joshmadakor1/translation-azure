@@ -8,11 +8,12 @@ passport.use(new FacebookStrategy({
     clientID: keys.facebook.clientID,
     clientSecret: keys.facebook.clientSecret,
     callbackURL: keys.facebook.callbackURL,
-    profileFields: ['email']
+    profileFields: ['email', 'first_name']
 },
     function (accessToken, refreshToken, profile, done) {
         console.log('profile!@!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!---------');
-        console.log(profile);
+        console.log(profile.name.givenName);
+        console.log('profile!@!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!---------');
         process.nextTick(function () {
             User.findOne({ 'facebookId': profile.id }, function (err, user) {
                 if (err) {
@@ -25,10 +26,12 @@ passport.use(new FacebookStrategy({
                     let newUser = new User();
                     newUser.facebookId = profile.id;
                     newUser.token = accessToken;
-                    newUser.username = profile.displayName;
-                    if (profile.emails) {
-                        newUser.email = profile.emails[0].value;
-                    }
+                    if (profile.displayName) { newUser.username = profile.displayName; }
+                    else { newUser.username = ""}
+                    if (newUser.firstName) { newUser.firstName = profile.name.givenName; }
+                    else { newUser.firstName = ""; }
+                    if (profile.emails) { newUser.email = profile.emails[0].value; }
+                    else { newUser.email = ""; }
                     console.log('NEW USER ---------------------------------');
                     console.log(newUser);
                     newUser.save(function (err) {

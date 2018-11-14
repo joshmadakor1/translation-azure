@@ -1,0 +1,27 @@
+﻿<!DOCTYPE html>
+<html>
+<% include ../partials/head %>
+<body class="bg-light">
+    <% include ../partials/nav %>
+    <div class="container bg-light px-0 my-3 p-3">
+        <font class="display-3">
+            View and Edit Your Translations!
+        </font>
+        
+    </div>
+    <div class="container bg-white px-0 my-3 p-3 border border-secondary text-muted">
+        <% for (let i = 0; i < translationIds.length; i++) { %>
+        (<a href="/?_id=<%= translationIds[i] %>">View</a>) (<a href="/profile/edittranslation/?id=<%= translationIds[i] %>">Edit</a>) <%= translationWords[i] %> <br />
+        <% } %>
+    </div>
+
+
+
+        <!--
+            <p>Raw Profile Info:</p>
+            <%= user %>
+        -->
+        <% include ../partials/scripts %>
+        <% include ../partials/footer %>
+</body>
+</html>

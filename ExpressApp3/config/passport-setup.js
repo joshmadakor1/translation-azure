@@ -8,11 +8,12 @@ passport.use(new FacebookStrategy({
     clientID: keys.facebook.clientID,
     clientSecret: keys.facebook.clientSecret,
     callbackURL: keys.facebook.callbackURL,
-    profileFields: ['email']
+    profileFields: ['email', 'first_name']
 },
     function (accessToken, refreshToken, profile, done) {
         console.log('profile!@!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!---------');
-        console.log(profile);
+        console.log(profile.name.givenName);
+        console.log('profile!@!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!---------');
         process.nextTick(function () {
             User.findOne({ 'facebookId': profile.id }, function (err, user) {
                 if (err) {
@@ -25,10 +26,12 @@ passport.use(new FacebookStrategy({
                     let newUser = new User();
                     newUser.facebookId = profile.id;
                     newUser.token = accessToken;
-                    newUser.username = profile.displayName;
-                    if (profile.emails) {
-                        newUser.email = profile.emails[0].value;
-                    }
+                    if (profile.displayName) { newUser.username = profile.displayName; }
+                    else { newUser.username = "user" + profile.id}
+                    if (newUser.firstName) { newUser.firstName = profile.name.givenName; }
+                    else { newUser.firstName = "user" + profile.id }
+                    if (profile.emails) { newUser.email = profile.emails[0].value; }
+                    else { newUser.email = "user" + profile.id; }
                     console.log('NEW USER ---------------------------------');
                     console.log(newUser);
                     newUser.save(function (err) {
@@ -49,6 +52,13 @@ passport.use(
         clientSecret: keys.google.clientSecret
     },
     function(accessToken, refreshToken, profile, done) {
+        let firstName = "";
+        if (profile.displayName.indexOf(" ") > 0) {
+            firstName = profile.displayName.split(" ")[0];
+        }
+        else {
+            firstName = profile.displayName;
+        }
         // Check if user already exists in DB
         User.findOne({ googleId: profile.id }).then(function (currentUser) {
             if (currentUser) {
@@ -59,7 +69,7 @@ passport.use(
             else {
                 // Create new user
                 new User({
-                    username: profile.displayName,
+                    firstName: firstName,
                     googleId: profile.id,
                     email: profile.emails[0].value
                 }).save().then(function (newUser) {

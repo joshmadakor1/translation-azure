@@ -50,7 +50,15 @@ module.exports = function (app) {
         return term;
     }
 
-    app.get('/earn', function (mainRequest, mainResponse) {
+    app.get('/contribute', function (mainRequest, mainResponse) {
+
+        //If user is not logged in, redirect them to login page
+        console.log(mainResponse.user);
+        if (!mainRequest.user) {
+            mainResponse.redirect('/auth/login');
+            return;
+        }
+
         let requestItem = esRequest({
             url: `${esUrl}:${esPort}/requests/_search`,
             method: 'GET',
@@ -75,7 +83,6 @@ module.exports = function (app) {
             let details = [];
             let tags = [];
             let requester = [];
-            let bounty = [];
             let id = [];
 
             for (let count = 0; count < numberOfMatches; count++) {
@@ -86,17 +93,15 @@ module.exports = function (app) {
                 tags[count] = response.body.hits.hits[count]._source.tags;
                 requester[count] = response.body.hits.hits[count]._source.requester;
                 details[count] = response.body.hits.hits[count]._source.details;
-                bounty[count] = response.body.hits.hits[count]._source.bounty;
                 id[count] = response.body.hits.hits[count]._id;
             }
-            mainResponse.render("earn", {
+            mainResponse.render("contribute", {
                 question: question,
                 sourceLanguage: sourceLanguage,
                 destinationLanguage: destinationLanguage,
                 details: details,
                 tags: tags,
                 requester: requester,
-                bounty: bounty,
                 id: id,
                 user: mainRequest.user
             });
@@ -249,7 +254,7 @@ module.exports = function (app) {
 
     app.get('/request', function (request, response) {
         response.render("request", {
-            user: request.user
+            user: request.user.id
         });
     });
 
@@ -266,8 +271,7 @@ module.exports = function (app) {
                 "question": request.body.term,
                 "details": request.body.details,
                 "tags": request.body.tags,
-                "requester": request.body.requester,
-                "bounty": request.body.bounty
+                "requester": request.user.id,
             }
         },
             function (req, res) {
@@ -499,6 +503,7 @@ module.exports = function (app) {
 
     app.get('/answer', function (mainRequest, mainResponse) {
         //let targetWord = mainRequest.query.word;
+
         let targetId = mainRequest.query._id;
 
         esRequest({
@@ -518,13 +523,11 @@ module.exports = function (app) {
             let details = null;
             let tags = null;
             let requester = null;
-            let bounty = null;
             let id = [];
 
             sourceLanguage = response.body.hits.hits[0]._source.sourceLanguage;
             destinationLanguage = response.body.hits.hits[0]._source.destinationLanguage;
             question = response.body.hits.hits[0]._source.question;
-            bounty = response.body.hits.hits[0]._source.bounty;
             details = response.body.hits.hits[0]._source.details;
             tags = response.body.hits.hits[0]._source.tags;
             requester = response.body.hits.hits[0]._source.requester;
@@ -534,7 +537,6 @@ module.exports = function (app) {
                 sourceLanguage: sourceLanguage,
                 destinationLanguage: destinationLanguage,
                 question: question,
-                bounty: bounty,
                 details: details,
                 tags: tags,
                 requester: requester,

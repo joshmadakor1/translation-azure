@@ -4,12 +4,18 @@
 <body class="bg-light">
     <% include ../partials/nav %>
     <div class="container bg-light px-0 my-3 p-3">
-        <font class="display-3">Welcome to Your Profile,
-        <% if (user.username.indexOf(" ") > 0) { %>
-        <%= user.username.split(" ")[0] %>
-        <% } else { %>
-        <%= user.username %>
-        <% } %>! </font>
+        <font class="display-3">
+            Welcome to Your Profile
+        <% if (user.username) {  %>
+            <% if (user.username.indexOf(" ") > 0) { %>
+            <%= user.username.split(" ")[0] %>
+            <% } else { %>
+            <%= user.username %>
+            <% } %>
+        <% } %>
+            <%= user.firstName %>!
+        </font>
+        
     </div>
     <div class="container bg-white px-0 my-3 p-3 border border-secondary">
         
