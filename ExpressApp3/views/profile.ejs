@@ -15,7 +15,7 @@
             <% } %>
             <%= user.firstName %>!
         </font>
-        <font class="text-muted">[edit name]</font>
+        <font class="text-muted">[Edit Display Name]</font>
 
     </div>
     
@@ -33,7 +33,7 @@
                 <div class="card">
                     <div class="card-body">
                         <h3 class="card-title">Active Requests</h3>
-                        <p>Total: <%= numberOfActiveRequests %> <% if (numberOfTranslations > 0) {%> <a href="/profile/viewrequests">(view)</a> <% } %></p>
+                        <p>Total: <%= numberOfActiveRequests %> <% if (numberOfActiveRequests > 0) {%> <a href="/profile/viewrequests">(view)</a> <% } %></p>
                     </div>
                 </div>
             </div>

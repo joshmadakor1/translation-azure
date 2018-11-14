@@ -14,7 +14,7 @@ const esRequest = require('request');
 const urlencodedParser = bodyParser.urlencoded({ extended: false });
 //const esPort = 9200;
 //const esUrl = "http://192.168.1.201";
-const esPort = 9200;
+const esPort = 9243;
 const esUrl = keys.elasticSearch.url;
 const translationType = "translations"
 const path = require('path');
@@ -144,6 +144,7 @@ module.exports = function (app) {
                 let id = [];
                 let tags = [];
                 let notes = [];
+                let question = [];
                 
                 try {
                     definitionArray = response.body.hits.hits[0]._source.answers
@@ -152,6 +153,7 @@ module.exports = function (app) {
 
                 }
                 for (let count = 0; count < number_Of_Hits; count++) {
+                    question.push(response.body.hits.hits[count]._source.question);
                     translation.push(response.body.hits.hits[count]._source.answers[0].definition.translation);
                     author.push(response.body.hits.hits[count]._source.answers[0].definition.author);
                     exampleSentence.push(response.body.hits.hits[count]._source.answers[0].definition.exampleSentence);
@@ -183,7 +185,7 @@ module.exports = function (app) {
                 console.log(`TOTAL TRANSLATIONS --------------- ${number_Of_Hits} -----------`)
                 mainResponse.render("index", {
                     numberOfTranslations: number_Of_Hits,
-                    targetWord: targetWord,
+                    targetWord: question,
                     translation: translation,
                     author: author,
                     exampleSentence: exampleSentence,
@@ -293,6 +295,71 @@ module.exports = function (app) {
         response.render('add', {
             user: request.user
         })
+    });
+
+    //  "script": "ctx._source.answers[0].definition.tags='Africa';ctx._source.answers[0].definition.translatorNotes='ass'"
+    /*
+     * "sourceLanguage": ,
+                "destinationLanguage": mainRequest.body.destinationLanguage,
+                "question": mainRequest.body.term,
+                "answers": [
+                    {
+                        "definition": {
+                            "translation": mainRequest.body.wordTranslation,
+                            "exampleSentence": mainRequest.body.sentenceTranslation,
+                            "author": mainRequest.user.id,
+                            "audioWord": mainRequest.body.audioWord,
+                            "audioSentence": mainRequest.body.audioSentence,
+                            "translatorNotes": mainRequest.body.translatorNotes,
+                            "tags": mainRequest.body.tags
+                        }
+                    }
+                ]
+     * 
+     * */
+
+    app.post('/submitEdit', function (mainRequest, mainResponse) {
+        console.log('-------------- /submitEdit')
+        console.log(mainRequest.body);
+        esRequest({
+            url: `${esUrl}:${esPort}/translations/x/${mainRequest.body.id}/_update`,
+            method: 'POST',
+            contentType: "application/json",
+            json: {
+                "script": `ctx._source.sourceLanguage='${mainRequest.body.sourceLanguage}';` +
+                    `ctx._source.destinationLanguage='${mainRequest.body.destinationLanguage}';` +
+                    `ctx._source.question='${mainRequest.body.term}';` +
+                    `ctx._source.answers[0].definition.translation='${mainRequest.body.wordTranslation}';` +
+                    `ctx._source.answers[0].definition.exampleSentence='${mainRequest.body.sentenceTranslation}';` +
+                    `ctx._source.answers[0].definition.audioWord='${mainRequest.body.audioWord}';` +
+                    `ctx._source.answers[0].definition.audioSentence='${mainRequest.body.audioSentence}';` +
+                    `ctx._source.answers[0].definition.translatorNotes='${mainRequest.body.translatorNotes}';` +
+                    `ctx._source.answers[0].definition.tags='${mainRequest.body.tags}';`
+
+            }
+        },  function (request, response) {
+                if (response.body.error) {
+                    let error = JSON.stringify(response.body.error.root_cause[0].type);
+                    console.log(response.body.error);
+                    console.log('there was an error.');
+                    mainResponse.end(`<h1>ERROR</h1><h2>${error}</h2><h3><a href="mailto:josh.madakor@gmail.com">Notify Admin</a></h3>`);
+                    return;
+                }
+                let result = response.body.result;
+                console.log("result ------------------------------");
+                console.log(result);
+
+                if (result === "updated" || result === "created") {
+
+                    mainResponse.sendStatus(200);
+                }
+                else {
+                    //If Elasticsearch failed to update/add the record, send a failure status
+                    mainResponse.sendStatus(500)
+                }
+
+            });
+
     });
 
     app.post('/submitDef', function (mainRequest, mainResponse) {

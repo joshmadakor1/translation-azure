@@ -122,9 +122,9 @@ $(document).ready(function(){
         if (term === undefined) {
           term = document.getElementById("term").innerHTML;
         }
-        let wordTranslation = (document.getElementById("WordTranslation").value).split("\n");
+        let wordTranslation = (document.getElementById("WordTranslation").value).replace(/\n/g,",,,");
         //let audioWord = document.getElementById("audioWord").value;
-        let sentenceTranslation = (document.getElementById("SentenceTranslation").value).split("\n");
+        let sentenceTranslation = (document.getElementById("SentenceTranslation").value).replace(/\n/g, ",,,");
         //let audioSentence = document.getElementById("audioSentence").value;
         let translatorNotes = document.getElementById("TranslatorNotes").value;
         let tags = document.getElementById("Tags").value;
@@ -201,23 +201,17 @@ $(document).ready(function(){
         if (term === undefined) {
             term = document.getElementById("term").innerHTML;
         }
-        let wordTranslation = (document.getElementById("WordTranslation").value).split("\n");
+        let wordTranslation = (document.getElementById("WordTranslation").value).replace(/\n/g,",,,");
         //let audioWord = document.getElementById("audioWord").value;
-        let sentenceTranslation = (document.getElementById("SentenceTranslation").value).split("\n");
+        let sentenceTranslation = (document.getElementById("SentenceTranslation").value).replace(/\n/g, ",,,");
         //let audioSentence = document.getElementById("audioSentence").value;
         let translatorNotes = document.getElementById("TranslatorNotes").value;
         let tags = document.getElementById("Tags").value;
         let audioWord = document.getElementById("audiolink1").download;
         let audioSentence = document.getElementById("audiolink2").download;
-        let id = null;
+        let id = document.getElementById("translationId").value;
 
-        try {
-            id = document.getElementById("hiddenP").innerHTML;
-        }
-        catch (error) {
-            console.log(error);
-        }
-
+       
 
         //console.log(term);
         let translationSubmission = {

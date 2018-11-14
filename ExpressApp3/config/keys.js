@@ -20,7 +20,7 @@
         password: 'I3gg8hEUhWyRbW51LyYsitw4RPpHADzhAHVl3ovCWRbZ84kpUnQIff1iiUPDL2xxzkh5URW2MlkkFB8ySReNGg=='
     },
     elasticSearch: {
-        url: 'http://elastic:1VUfgAlcK619UXR8VfNG@lb-2pkvvdzm5ntzs.centralus.cloudapp.azure.com'
+        url: 'https://elastic:t74h9ZBiCNdeKUqXWoqdWuur@61b51ac493ac42e3a82bda2a1150e6c9.us-west-2.aws.found.io'
     },
     azureBlob: {
         connectionString: 'DefaultEndpointsProtocol=https;AccountName=hcisstorage;AccountKey=3mSmSv/eDayPYhGyhabe+pA7lZxQmzbqzUusmucIqdj4i4DIlvFSmvtmv466q2dv70quNC4aCcNdbQnUm3ZddA==;EndpointSuffix=core.windows.net'

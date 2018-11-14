@@ -1,7 +1,7 @@
 ﻿const router       = require('express').Router();
 const keys         = require('../config/keys');
 const esRequest    = require('request');
-const esPort       = 9200;
+const esPort       = 9243;
 const esUrl        = keys.elasticSearch.url;
 const EventEmitter = require('events');
 
@@ -83,10 +83,10 @@ router.get('/edittranslation', function (mreq, resp) {
         console.log('.............................................');
         console.log(`${esUrl}:${esPort}/translations/x/${esTranslationId}`);
 
-        let translation = [];
+        let translation = "";
         let targetWord = [];
         let author = [];
-        let exampleSentence = [];
+        let exampleSentence = "";
         let audioWord = [];
         let audioSentence = [];
         let upvotes = [];
@@ -96,9 +96,9 @@ router.get('/edittranslation', function (mreq, resp) {
         let notes = [];
 
         targetWord.push(responseObject._source.question);
-        translation.push(responseObject._source.answers[0].definition.translation);
+        translation = responseObject._source.answers[0].definition.translation;
         author.push(responseObject._source.answers[0].definition.author);
-        exampleSentence.push(responseObject._source.answers[0].definition.exampleSentence);
+        exampleSentence = responseObject._source.answers[0].definition.exampleSentence;
         audioWord.push(responseObject._source.answers[0].definition.audioWord);
         audioSentence.push(responseObject._source.answers[0].definition.audioSentence);
         upvotes.push(responseObject._source.answers[0].definition.upvotes);

@@ -22,8 +22,10 @@
                     <option value="English">English</option>
                 </select>
             </p>
-            <p>Original Word:<br /><input id="term" placeholder="Type your word or phrase to define here..." style="width:100%;" value="<%= targetWord %>">
-            <p>Translation:<br /><textarea id="WordTranslation" placeholder="Translations go here..." style="width:100%;height: 100px"><%= translation %></textarea></p>
+            <p>
+                Original Word:<br /><input id="term" placeholder="Type your word or phrase to define here..." style="width:100%;" value="<%= targetWord %>">
+                <% translation = translation.replace(/,,,/g,'\n') %>
+<p>Translation:<br /><textarea id="WordTranslation" placeholder="Translations go here..." style="width:100%;height: 100px"><%= translation %></textarea></p>
             <p>
                 Click 'record' to record the word!<br /><button id="startRecordingWord" onclick="startRecording(this);">record</button>
                 <button id="stopRecordingWord" onclick="stopRecording(this);" disabled>stop</button>
@@ -31,6 +33,8 @@
             </p>
             <p>
                 Example sentences:<br />
+                <%= Array.isArray(exampleSentence) %>
+                <% exampleSentence = exampleSentence.replace(/,,,/g,'\n') %>
                 <textarea id="SentenceTranslation" placeholder="Example sentences go here..." style="width:100%;height: 100px"><%= exampleSentence %></textarea>
             </p>
             <p>
@@ -42,7 +46,7 @@
             <p>Extra notes:<br /><input id="TranslatorNotes" placeholder="Enter miscellaneous notes here..." style="width:100%;" value="<%= notes %>"></p>
             <p>Tags:<br /><input id="Tags" placeholder="Enter tags here, separated by commas. Example: food, shopping, slang, formal" style="width:100%;" value="<%= tags %>"></p>
             <p><button class="submitDefinition" id="submitEdit">Submit</button></p>
-            <p><font size="0"><%= id %></font></p>
+            <input hidden id="translationId" value="<%= id %>">
         </div>
 
         <% include ../partials/scripts %>
