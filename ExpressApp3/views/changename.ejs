@@ -1,0 +1,29 @@
+﻿<!DOCTYPE html>
+<html>
+<% include ../partials/head %>
+<body class="bg-light">
+    <%= user %>
+    <% include ../partials/nav %>
+    <div class="container bg-light px-0 my-3 p-3">
+        <font class="display-3">
+            Enter Your New Display Name!
+        </font>
+
+    </div>
+    <div class="container">
+        <p><input class="p-3" type="text" style="width:100%" id="newname"/> </p>
+
+        <p>
+            <button id="submitnamechange" class="btn btn-sm" style="width:100%">Save</button>
+        </p>
+    </div>
+  
+    <!--
+        <p>Raw Profile Info:</p>
+        <%= user %>
+    -->
+
+    <% include ../partials/scripts %>
+    <% include ../partials/footer %>
+</body>
+</html>

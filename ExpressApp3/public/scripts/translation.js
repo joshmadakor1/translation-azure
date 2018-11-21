@@ -64,6 +64,10 @@ $(document).ready(function(){
         return htmlString;
     }
 
+    $('#editDisplayName').unbind("click").click(function () {
+        let newUrl = window.location.protocol + "//" + window.location.host + "/profile/changename";
+        window.location.href = newUrl;
+    });
 
     $('#submitRequest').unbind("click").click(function () {
         let term = document.getElementById("requestTerm").value;
@@ -101,6 +105,7 @@ $(document).ready(function(){
             alert("make sure to fill in all the fields");
         }
     });
+
 
 
     $('#submitWord').unbind("click").click(function () {
@@ -182,6 +187,7 @@ $(document).ready(function(){
         }
     });
 
+    
     $('#submitEdit').unbind("click").click(function () {
 
         let sourceLanguage = document.getElementById("sourceLanguage").value;
@@ -244,7 +250,7 @@ $(document).ready(function(){
                     console.log("Post Error!\n" + error);
                 },
                 complete: function (textStatus, errorThrown) {
-                    console.log('penis');
+
                 }
             });
 
@@ -253,6 +259,151 @@ $(document).ready(function(){
             alert("make sure to fill in all the fields");
             return;
         }
+    });
+
+
+
+
+
+
+    $('#submitnamechange').unbind("click").click(function () {
+
+        var newName = document.getElementById("newname").value
+        console.log(newName);
+        
+        var newValues = { $set: { firstName: newName } };
+        console.log(newValues);
+        
+        $.ajax({
+            type: 'POST',
+            url: '/profile/changename',
+            cache: false,
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify(newValues),
+            dataType: "text",
+            success: function (data) {
+                console.log('Post Success!');
+                let newUrl = window.location.protocol + "//" + window.location.host + "/profile";
+                window.location.href = newUrl;
+            },
+            error: function (error) {
+                console.log("Post Error!\n" + error);
+            },
+            complete: function (textStatus, errorThrown) {
+                console.log('complete');
+            }
+        });
+
+    });
+
+
+
+
+
+
+
+
+    $('#upvote').unbind("click").click(function () {
+
+        let translationId = document.getElementById("translationId").innerHTML;
+        let votecount = document.getElementById("upvote").innerHTML.split(" ")[0];
+        console.log(votecount);
+       
+        $.ajax({
+            type: 'POST',
+            url: `/upvote/?id=${translationId}`,
+            cache: false,
+            contentType: "application/json; charset=utf-8",
+            dataType: "text",
+            success: function (data) {
+                //let jsonResponse = JSON.parse(data);
+                console.log(data);
+                //console.log(jsonResponse.count);
+                console.log('Post Success!');
+                votecount = ++votecount;
+                console.log(votecount);
+                document.getElementById("upvote").innerHTML = (votecount + " &#128077;");
+                //let newUrl = window.location.protocol + "//" + window.location.host + "/";
+                //window.location.href = newUrl;
+            },
+            error: function (error) {
+                console.log("Post Error!\n" + error);
+            },
+            complete: function (textStatus, errorThrown) {
+                console.log('complete.');
+            }
+        });
+    });
+
+    $('#downvote').unbind("click").click(function () {
+
+        let translationId = document.getElementById("translationId").innerHTML;
+        let votecount = document.getElementById("downvote").innerHTML.split(" ")[0];
+        console.log(votecount);
+
+        $.ajax({
+            type: 'POST',
+            url: `/downvote/?id=${translationId}`,
+            cache: false,
+            contentType: "application/json; charset=utf-8",
+            dataType: "text",
+            success: function (data) {
+                //let jsonResponse = JSON.parse(data);
+                console.log(data);
+                //console.log(jsonResponse.count);
+                console.log('Post Success!');
+                votecount = ++votecount;
+                console.log(votecount);
+                document.getElementById("downvote").innerHTML = (votecount + " &#128078;");
+                //let newUrl = window.location.protocol + "//" + window.location.host + "/";
+                //window.location.href = newUrl;
+            },
+            error: function (error) {
+                console.log("Post Error!\n" + error);
+            },
+            complete: function (textStatus, errorThrown) {
+                console.log('complete.');
+            }
+        })
+    });
+
+
+
+
+
+
+
+
+
+
+    $('#deleteTranslation').unbind("click").click(function () {
+        console.log('hi');
+        console.log(document.getElementById("translationId").value);
+        let translationId = document.getElementById("translationId").value;
+        let deleteTranslation = confirm(`You sure you want to PERMANENTLY delete the translation? All upvotes/downvotes from it will be lost.`);
+        console.log(deleteTranslation);
+        if (!deleteTranslation) { return; }
+        console.log('deleting translation.'); 
+        $.ajax({
+            type: 'POST',
+            url: `/delete/?id=${translationId}`,
+            cache: false,
+            contentType: "application/json; charset=utf-8",
+            dataType: "text",
+            success: function (data) {
+                console.log('Post Success!');
+                //let newUrl = window.location.protocol + "//" + window.location.host + "/";
+                //window.location.href = newUrl;
+            },
+            error: function (error) {
+                console.log("Post Error!\n" + error);
+            },
+            complete: function (textStatus, errorThrown) {
+                console.log('complete.');
+                let newUrl = window.location.protocol + "//" + window.location.host + "/profile/viewtranslations";
+                window.location.href = newUrl;
+            }
+        });
     });
 
     $('#submitAnswer').on('click', function() {

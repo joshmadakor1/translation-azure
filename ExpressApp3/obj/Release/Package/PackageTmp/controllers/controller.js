@@ -14,7 +14,7 @@ const esRequest = require('request');
 const urlencodedParser = bodyParser.urlencoded({ extended: false });
 //const esPort = 9200;
 //const esUrl = "http://192.168.1.201";
-const esPort = 9200;
+const esPort = 9243;
 const esUrl = keys.elasticSearch.url;
 const translationType = "translations"
 const path = require('path');
@@ -50,7 +50,15 @@ module.exports = function (app) {
         return term;
     }
 
-    app.get('/earn', function (mainRequest, mainResponse) {
+    app.get('/contribute', function (mainRequest, mainResponse) {
+
+        //If user is not logged in, redirect them to login page
+        console.log(mainResponse.user);
+        if (!mainRequest.user) {
+            mainResponse.redirect('/auth/login');
+            return;
+        }
+
         let requestItem = esRequest({
             url: `${esUrl}:${esPort}/requests/_search`,
             method: 'GET',
@@ -75,7 +83,6 @@ module.exports = function (app) {
             let details = [];
             let tags = [];
             let requester = [];
-            let bounty = [];
             let id = [];
 
             for (let count = 0; count < numberOfMatches; count++) {
@@ -86,17 +93,15 @@ module.exports = function (app) {
                 tags[count] = response.body.hits.hits[count]._source.tags;
                 requester[count] = response.body.hits.hits[count]._source.requester;
                 details[count] = response.body.hits.hits[count]._source.details;
-                bounty[count] = response.body.hits.hits[count]._source.bounty;
                 id[count] = response.body.hits.hits[count]._id;
             }
-            mainResponse.render("earn", {
+            mainResponse.render("contribute", {
                 question: question,
                 sourceLanguage: sourceLanguage,
                 destinationLanguage: destinationLanguage,
                 details: details,
                 tags: tags,
                 requester: requester,
-                bounty: bounty,
                 id: id,
                 user: mainRequest.user
             });
@@ -106,8 +111,6 @@ module.exports = function (app) {
     app.get('/', function (mainRequest, mainResponse) {
         console.log(`--> get /`);
         let matches = null;
-        console.log('#########################################################');
-        console.log(mainRequest.user);
         // If user is clicking a word to see a definition.
         if (mainRequest.query.word !== undefined) {
             let targetWord = mainRequest.query.word;
@@ -139,6 +142,7 @@ module.exports = function (app) {
                 let id = [];
                 let tags = [];
                 let notes = [];
+                let question = [];
                 
                 try {
                     definitionArray = response.body.hits.hits[0]._source.answers
@@ -147,6 +151,7 @@ module.exports = function (app) {
 
                 }
                 for (let count = 0; count < number_Of_Hits; count++) {
+                    question.push(response.body.hits.hits[count]._source.question);
                     translation.push(response.body.hits.hits[count]._source.answers[0].definition.translation);
                     author.push(response.body.hits.hits[count]._source.answers[0].definition.author);
                     exampleSentence.push(response.body.hits.hits[count]._source.answers[0].definition.exampleSentence);
@@ -178,7 +183,7 @@ module.exports = function (app) {
                 console.log(`TOTAL TRANSLATIONS --------------- ${number_Of_Hits} -----------`)
                 mainResponse.render("index", {
                     numberOfTranslations: number_Of_Hits,
-                    targetWord: targetWord,
+                    targetWord: question,
                     translation: translation,
                     author: author,
                     exampleSentence: exampleSentence,
@@ -248,9 +253,15 @@ module.exports = function (app) {
     });
 
     app.get('/request', function (request, response) {
-        response.render("request", {
-            user: request.user
-        });
+     
+        if (request.user !== undefined) {
+            response.render("request", {
+                user: request.user.id
+            });
+        }
+        else {
+            response.redirect('/auth/login');
+        }
     });
 
     app.post('/request', function (request, response) {
@@ -266,8 +277,7 @@ module.exports = function (app) {
                 "question": request.body.term,
                 "details": request.body.details,
                 "tags": request.body.tags,
-                "requester": request.body.requester,
-                "bounty": request.body.bounty
+                "requester": request.user.id,
             }
         },
             function (req, res) {
@@ -289,6 +299,67 @@ module.exports = function (app) {
         response.render('add', {
             user: request.user
         })
+    });
+
+    app.post('/delete', function (req, mres) {
+        if (!req.query.id) { res.sendStatus(500); }
+        let translationId = req.query.id;
+        esRequest({
+            url: `${esUrl}:${esPort}/translations/x/${translationId}/`,
+            method: 'DELETE'
+        }, function (req, res) {
+            
+            if (res.body.indexOf("deleted") > 0) {
+                mres.sendStatus(200);
+            }
+            else {
+                mres.sendStatus(500);
+            }
+        });
+    });
+    
+    app.post('/submitEdit', function (mainRequest, mainResponse) {
+        console.log('-------------- /submitEdit')
+        console.log(mainRequest.body);
+        esRequest({
+            url: `${esUrl}:${esPort}/translations/x/${mainRequest.body.id}/_update`,
+            method: 'POST',
+            contentType: "application/json",
+            json: {
+                "script": `ctx._source.sourceLanguage='${mainRequest.body.sourceLanguage}';` +
+                    `ctx._source.destinationLanguage='${mainRequest.body.destinationLanguage}';` +
+                    `ctx._source.question='${mainRequest.body.term}';` +
+                    `ctx._source.answers[0].definition.translation='${mainRequest.body.wordTranslation}';` +
+                    `ctx._source.answers[0].definition.exampleSentence='${mainRequest.body.sentenceTranslation}';` +
+                    `ctx._source.answers[0].definition.audioWord='${mainRequest.body.audioWord}';` +
+                    `ctx._source.answers[0].definition.audioSentence='${mainRequest.body.audioSentence}';` +
+                    `ctx._source.answers[0].definition.translatorNotes='${mainRequest.body.translatorNotes}';` +
+                    `ctx._source.answers[0].definition.tags='${mainRequest.body.tags}';`
+
+            }
+        },  function (request, response) {
+                if (response.body.error) {
+                    let error = JSON.stringify(response.body.error.root_cause[0].type);
+                    console.log(response.body.error);
+                    console.log('there was an error.');
+                    mainResponse.end(`<h1>ERROR</h1><h2>${error}</h2><h3><a href="mailto:josh.madakor@gmail.com">Notify Admin</a></h3>`);
+                    return;
+                }
+                let result = response.body.result;
+                console.log("result ------------------------------");
+                console.log(result);
+
+                if (result === "updated" || result === "created") {
+
+                    mainResponse.sendStatus(200);
+                }
+                else {
+                    //If Elasticsearch failed to update/add the record, send a failure status
+                    mainResponse.sendStatus(500)
+                }
+
+            });
+
     });
 
     app.post('/submitDef', function (mainRequest, mainResponse) {
@@ -476,6 +547,54 @@ module.exports = function (app) {
 
     });
 
+    app.post('/upvote', function (req, res) {
+        console.log(req.query.id);
+        let translationId = req.query.id;
+
+        //res.json({ "count": 44 });
+        //res.sendStatus(200);
+
+        esRequest({
+            url: `${esUrl}:${esPort}/translations/x/${translationId}/_update`,
+            method: 'POST',
+            json: { "script": "ctx._source.answers[0].definition.upvotes+=1;" }
+        }, function (request, response) {
+            
+            if (JSON.stringify(response.body).indexOf('updated') > 0) {
+                res.sendStatus(200);
+            }
+            else {
+                res.sendStatus(500);
+            }
+            
+        });
+    });
+
+    app.post('/downvote', function (req, res) {
+        console.log(req.query.id);
+        let translationId = req.query.id;
+
+        //res.json({ "count": 44 });
+        //res.sendStatus(200);
+
+        esRequest({
+            url: `${esUrl}:${esPort}/translations/x/${translationId}/_update`,
+            method: 'POST',
+            json: { "script": "ctx._source.answers[0].definition.downvotes+=1;" }
+        }, function (request, response) {
+
+            if (JSON.stringify(response.body).indexOf('updated') > 0) {
+                res.sendStatus(200);
+            }
+            else {
+                res.sendStatus(500);
+            }
+
+        });
+    });
+
+
+
     app.post("/uploadAudio", type, function (request, response) {
         console.log(`OLD: ${AUDIO_LOCATION}\\${request.file.filename}`);
         console.log(`NEW: ${AUDIO_LOCATION}\\${request.file.originalname}`);
@@ -499,6 +618,7 @@ module.exports = function (app) {
 
     app.get('/answer', function (mainRequest, mainResponse) {
         //let targetWord = mainRequest.query.word;
+
         let targetId = mainRequest.query._id;
 
         esRequest({
@@ -518,13 +638,11 @@ module.exports = function (app) {
             let details = null;
             let tags = null;
             let requester = null;
-            let bounty = null;
             let id = [];
 
             sourceLanguage = response.body.hits.hits[0]._source.sourceLanguage;
             destinationLanguage = response.body.hits.hits[0]._source.destinationLanguage;
             question = response.body.hits.hits[0]._source.question;
-            bounty = response.body.hits.hits[0]._source.bounty;
             details = response.body.hits.hits[0]._source.details;
             tags = response.body.hits.hits[0]._source.tags;
             requester = response.body.hits.hits[0]._source.requester;
@@ -534,7 +652,6 @@ module.exports = function (app) {
                 sourceLanguage: sourceLanguage,
                 destinationLanguage: destinationLanguage,
                 question: question,
-                bounty: bounty,
                 details: details,
                 tags: tags,
                 requester: requester,

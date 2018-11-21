@@ -111,8 +111,6 @@ module.exports = function (app) {
     app.get('/', function (mainRequest, mainResponse) {
         console.log(`--> get /`);
         let matches = null;
-        console.log('#########################################################');
-        console.log(mainRequest.user);
         // If user is clicking a word to see a definition.
         if (mainRequest.query.word !== undefined) {
             let targetWord = mainRequest.query.word;
@@ -255,9 +253,15 @@ module.exports = function (app) {
     });
 
     app.get('/request', function (request, response) {
-        response.render("request", {
-            user: request.user.id
-        });
+     
+        if (request.user !== undefined) {
+            response.render("request", {
+                user: request.user.id
+            });
+        }
+        else {
+            response.redirect('/auth/login');
+        }
     });
 
     app.post('/request', function (request, response) {
@@ -297,27 +301,23 @@ module.exports = function (app) {
         })
     });
 
-    //  "script": "ctx._source.answers[0].definition.tags='Africa';ctx._source.answers[0].definition.translatorNotes='ass'"
-    /*
-     * "sourceLanguage": ,
-                "destinationLanguage": mainRequest.body.destinationLanguage,
-                "question": mainRequest.body.term,
-                "answers": [
-                    {
-                        "definition": {
-                            "translation": mainRequest.body.wordTranslation,
-                            "exampleSentence": mainRequest.body.sentenceTranslation,
-                            "author": mainRequest.user.id,
-                            "audioWord": mainRequest.body.audioWord,
-                            "audioSentence": mainRequest.body.audioSentence,
-                            "translatorNotes": mainRequest.body.translatorNotes,
-                            "tags": mainRequest.body.tags
-                        }
-                    }
-                ]
-     * 
-     * */
-
+    app.post('/delete', function (req, mres) {
+        if (!req.query.id) { res.sendStatus(500); }
+        let translationId = req.query.id;
+        esRequest({
+            url: `${esUrl}:${esPort}/translations/x/${translationId}/`,
+            method: 'DELETE'
+        }, function (req, res) {
+            
+            if (res.body.indexOf("deleted") > 0) {
+                mres.sendStatus(200);
+            }
+            else {
+                mres.sendStatus(500);
+            }
+        });
+    });
+    
     app.post('/submitEdit', function (mainRequest, mainResponse) {
         console.log('-------------- /submitEdit')
         console.log(mainRequest.body);
@@ -546,6 +546,54 @@ module.exports = function (app) {
 
 
     });
+
+    app.post('/upvote', function (req, res) {
+        console.log(req.query.id);
+        let translationId = req.query.id;
+
+        //res.json({ "count": 44 });
+        //res.sendStatus(200);
+
+        esRequest({
+            url: `${esUrl}:${esPort}/translations/x/${translationId}/_update`,
+            method: 'POST',
+            json: { "script": "ctx._source.answers[0].definition.upvotes+=1;" }
+        }, function (request, response) {
+            
+            if (JSON.stringify(response.body).indexOf('updated') > 0) {
+                res.sendStatus(200);
+            }
+            else {
+                res.sendStatus(500);
+            }
+            
+        });
+    });
+
+    app.post('/downvote', function (req, res) {
+        console.log(req.query.id);
+        let translationId = req.query.id;
+
+        //res.json({ "count": 44 });
+        //res.sendStatus(200);
+
+        esRequest({
+            url: `${esUrl}:${esPort}/translations/x/${translationId}/_update`,
+            method: 'POST',
+            json: { "script": "ctx._source.answers[0].definition.downvotes+=1;" }
+        }, function (request, response) {
+
+            if (JSON.stringify(response.body).indexOf('updated') > 0) {
+                res.sendStatus(200);
+            }
+            else {
+                res.sendStatus(500);
+            }
+
+        });
+    });
+
+
 
     app.post("/uploadAudio", type, function (request, response) {
         console.log(`OLD: ${AUDIO_LOCATION}\\${request.file.filename}`);

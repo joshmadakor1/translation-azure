@@ -1,29 +1,28 @@
 <html>
     <% include ../partials/head %>
-<body>
+<body class="bg-light">
     <% include ../partials/scripts %>
     <% include ../partials/nav %>
-    <div class="container">
-        <form autocomplete="off"></form>
+    <div class="container bg-light px-0 my-3 p-3">
+        <font class="display-3">Answering the Following Translation:</font>
     </div>
-    <div class="definitionSpace">
-        <table>
+    <div class="container bg-white px-0 my-3 p-3 border border-secondary">
+        <table class="table">
             <tr>
                 <td width="50%"><h2>Word/Phrase</h2> </td>
                 <td width="20%"><h2>From</h2></td>
                 <td width="20%"><h2>To</h2></td>
-                <td width="10%"><h2>Payout</h2></td>
             </tr>
             <tr>
                 <td width="50%"><div id="term"><%= question %></div></td>
                 <td width="20%"><%= sourceLanguage %></td>
                 <td width="20%"><%= destinationLanguage %> </td>
-                <td width="10%"><%= bounty %> </td>
             </tr>
         </table>
     </div>
 
-    <div class="definitionSpace">
+    <hr />
+    <div class="container">
         <p>
             From:<br><select id="sourceLanguage">
                 <option value="English"><%= sourceLanguage %></option>
@@ -35,22 +34,26 @@
             </select>
         </p>
         <hr>
-        <p>Ex: neko,ねこ,猫<textarea id="WordTranslation" placeholder="<%= destinationLanguage %> translation for [<%= question %>] goes here..."></textarea></p>
+        Translation:<br />
+        <p><textarea id="WordTranslation" placeholder="<%= destinationLanguage %> translation for [<%= question %>] goes here..." style="width:100%;height: 100px"></textarea></p>
         <p>
-            Click 'record' to record the word!<br /><button id="startRecordingWord" onclick="startRecording(this);">record</button>
-            <button id="stopRecordingWord" onclick="stopRecording(this);" disabled>stop</button>
+            Click 'record' to record the word!<br /><button id="startRecordingWord" class="btn"  onclick="startRecording(this);">record</button>
+            <button id="stopRecordingWord" class="btn"  onclick="stopRecording(this);" disabled>stop</button>
             <ul id="recordingslist"></ul>
         </p>
-        <p>Ex: Ah! There is a cat!, あ！ねこがいますよ！, あ！猫がいますよ！<textarea id="SentenceTranslation" placeholder="Example sentence goes here..."></textarea></p></p>
+        Example/alternate sentence:<br />
+        <p><textarea id="SentenceTranslation" placeholder="Example or alternative sentence including [<%= question %>] goes here..." style="width:100%;height: 100px"></textarea></p></p>
         <p>
             Click 'record' to record the example sentence!<br />
-            <button id="startRecordingSentence" onclick="startRecording2(this);">record</button>
-            <button id="stopRecordingSentence" onclick="stopRecording2(this);" disabled>stop</button>
+            <button id="startRecordingSentence" class="btn" onclick="startRecording2(this);">record</button>
+            <button id="stopRecordingSentence" class="btn"  onclick="stopRecording2(this);" disabled>stop</button>
             <ul id="recordingslist2"></ul>
         </p>
-        <p>Ex: kitten = koneko,こねこ,子猫<input id="TranslatorNotes" placeholder="Enter miscellaneous notes here..."></p>
-        <p>Ex: animals<input id="Tags" placeholder="Enter tags here, separated by commas. Example: food, shopping, slang, formal"></p>
-        <p><button class="submitDefinition" id="submitWord">Submit</button></p>
+        <p>Notes/Explanation:<br />
+        <input style="width:100%;" id="TranslatorNotes" placeholder="Enter miscellaneous notes or alternative explanation here..."></p>
+        <p>Tags:<br />
+        <input style="width:100%;" id="Tags" placeholder="Enter tags here, separated by commas. Example: food, shopping, slang, formal"></p>
+        <p><button class="btn btn-info" id="submitWord">Submit</button></p>
     </div>
     <p hidden id="hiddenP"><%= id %></p>
     <script src="https://code.jquery.com/jquery-1.12.4.js" integrity="sha256-Qw82+bXyGq6MydymqBxNPYTaUXXq7c8v3CwiYwLLNXU=" crossorigin="anonymous"></script>

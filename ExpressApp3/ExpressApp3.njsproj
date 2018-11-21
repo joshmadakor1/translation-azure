@@ -107,6 +107,7 @@
     <Content Include="views\define.ejs" />
     <Content Include="views\contribute.ejs" />
     <Content Include="views\edittranslation.ejs" />
+    <Content Include="views\changename.ejs" />
     <Content Include="views\viewtranslations.ejs" />
     <Content Include="views\profile.ejs" />
     <Content Include="views\login.ejs">

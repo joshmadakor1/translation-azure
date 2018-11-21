@@ -1,5 +1,6 @@
 ﻿const router       = require('express').Router();
-const keys         = require('../config/keys');
+const keys = require('../config/keys');
+const User = require('../models/user-model');
 const esRequest    = require('request');
 const esPort       = 9243;
 const esUrl        = keys.elasticSearch.url;
@@ -13,11 +14,15 @@ router.get('/', function (req, res) {
     elasticResponse.numberOfTranslations = 0;
     elasticResponse.activeRequests = 0;
     let translations = [];
-
+    let sessionID = req.session.passport.user;
+    console.log('-------------------------------------------------------------------------------------');
+    console.log(req.session.passport.user);
+    console.log('-------------------------------------------------------------------------------------');
+    //console.log(req.session); console.log(req.session.passport.user);
     esRequest({
         url: `${esUrl}:${esPort}/translations/_search`,
         method: 'GET',
-        json: { "query": { "match": { "answers.definition.author": req.user.id } } }
+        json: { "query": { "match": { "answers.definition.author": sessionID } } }
     }, function (request, response) {
         //console.log(req.user.id);
         //console.log(response.body.hits.hits);
@@ -33,7 +38,7 @@ router.get('/', function (req, res) {
         esRequest({
             url: `${esUrl}:${esPort}/requests/_search`,
             method: 'GET',
-            json: { "query": { "match": { "requester": req.user.id } } }
+            json: { "query": { "match": { "requester": req.session.passport.user } } }
         }, function (request, response) {
             elasticResponse.activeRequests = response.body.hits.total;
             elasticResponse.emit('update');
@@ -63,6 +68,45 @@ router.get('/', function (req, res) {
     });
     */
 });
+
+router.get('/changename', function (req, res) {
+    res.render("changename", {
+        user: req.user
+    });
+});
+
+router.post('/changename', function (req, res) {
+    console.log(req.body.$set.firstName);
+    console.log(req.user.id);
+
+    User.findById(req.user.id).then(function (currentUser) {
+        if (currentUser) {
+            console.log('-------found one  user---------');
+            console.log(currentUser);
+            console.log(currentUser.firstName);
+            currentUser.firstName = req.body.$set.firstName;
+            currentUser.save(function (err) {
+                if (err) {
+                    console.log('error@@@@@@@@@@@@@');
+                    res.sendStatus(500);
+                }
+                else {
+                    console.log('success@@@@@@@@@@@@@@@@');
+                    res.sendStatus(200);
+                }
+            });
+            
+            // User Exists
+            // console.log(`User is: ${currentUser}`);
+            //done(null, currentUser);
+        }
+        else {
+            // Create new user
+           
+        }
+    })
+});
+
 
 router.get('/edittranslation', function (mreq, resp) {
     let elasticResponse = new EventEmitter();
@@ -131,20 +175,23 @@ router.get('/viewtranslations', function (req, res) {
     esRequest({
         url: `${esUrl}:${esPort}/translations/_search`,
         method: 'GET',
-        json: { "query": { "match": { "answers.definition.author": req.user.id } } }
+        json: { "query": { "match": { "answers.definition.author": req.session.passport.user } } }
     }, function (request, response) {
 
         let translationWords = [];
+        let translationTranslations = [];
         let translationIds = [];
 
         for (let i = 0; i < response.body.hits.hits.length; i++) {
             translationWords.push(response.body.hits.hits[i]._source.question);
             translationIds.push(response.body.hits.hits[i]._id);
+            translationTranslations.push(response.body.hits.hits[i]._source.answers[0].definition.translation.replace(/,,,/g, '\n'));
         }
         res.render('viewtranslations', {
             user: req.user,
             translationWords: translationWords,
-            translationIds: translationIds
+            translationIds: translationIds,
+            translationTranslations: translationTranslations
         });
     });       
 });

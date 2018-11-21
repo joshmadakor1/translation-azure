@@ -10,12 +10,11 @@
             <% if (user.username.indexOf(" ") > 0) { %>
             <%= user.username.split(" ")[0] %>
             <% } else { %>
-            <%= user.username %>
             <% } %>
             <% } %>
-            <%= user.firstName %>!
+            <font id="firstName"><%= user.firstName %></font>!
         </font>
-        <font class="text-muted">[Edit Display Name]</font>
+        <button class="btn btn-sm btn-outline-secondary" id="editDisplayName">Edit Name</button>
 
     </div>
     

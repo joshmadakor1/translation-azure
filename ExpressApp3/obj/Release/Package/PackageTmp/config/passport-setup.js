@@ -27,11 +27,11 @@ passport.use(new FacebookStrategy({
                     newUser.facebookId = profile.id;
                     newUser.token = accessToken;
                     if (profile.displayName) { newUser.username = profile.displayName; }
-                    else { newUser.username = ""}
+                    else { newUser.username = "user" + profile.id}
                     if (newUser.firstName) { newUser.firstName = profile.name.givenName; }
-                    else { newUser.firstName = ""; }
+                    else { newUser.firstName = "user" + profile.id }
                     if (profile.emails) { newUser.email = profile.emails[0].value; }
-                    else { newUser.email = ""; }
+                    else { newUser.email = "user" + profile.id; }
                     console.log('NEW USER ---------------------------------');
                     console.log(newUser);
                     newUser.save(function (err) {
@@ -52,17 +52,24 @@ passport.use(
         clientSecret: keys.google.clientSecret
     },
     function(accessToken, refreshToken, profile, done) {
+        let firstName = "";
+        if (profile.displayName.indexOf(" ") > 0) {
+            firstName = profile.displayName.split(" ")[0];
+        }
+        else {
+            firstName = profile.displayName;
+        }
         // Check if user already exists in DB
         User.findOne({ googleId: profile.id }).then(function (currentUser) {
             if (currentUser) {
                 // User Exists
-                console.log(`User is: ${currentUser.username}`);
+               // console.log(`User is: ${currentUser}`);
                 done(null, currentUser);
             }
             else {
                 // Create new user
                 new User({
-                    username: profile.displayName,
+                    firstName: firstName,
                     googleId: profile.id,
                     email: profile.emails[0].value
                 }).save().then(function (newUser) {
@@ -75,11 +82,16 @@ passport.use(
 )
 
 passport.serializeUser(function (user, done) {
+    console.log(user);
+    console.log('SERIALIZING USER!------------------------------')
     done(null, user.id);
 });
 
 passport.deserializeUser(function (id, done) {
+    console.log('DESERIALIZING USER!----------------------------------------------');
+    console.log(id);
     User.findById(id).then(function (user) {
+        
         done(null, user);
     });
 });

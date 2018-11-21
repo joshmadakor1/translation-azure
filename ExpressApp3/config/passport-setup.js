@@ -63,7 +63,7 @@ passport.use(
         User.findOne({ googleId: profile.id }).then(function (currentUser) {
             if (currentUser) {
                 // User Exists
-                console.log(`User is: ${currentUser.username}`);
+               // console.log(`User is: ${currentUser}`);
                 done(null, currentUser);
             }
             else {
@@ -82,11 +82,16 @@ passport.use(
 )
 
 passport.serializeUser(function (user, done) {
+    console.log(user);
+    console.log('SERIALIZING USER!------------------------------')
     done(null, user.id);
 });
 
 passport.deserializeUser(function (id, done) {
+    console.log('DESERIALIZING USER!----------------------------------------------');
+    console.log(id);
     User.findById(id).then(function (user) {
+        
         done(null, user);
     });
 });

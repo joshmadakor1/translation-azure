@@ -15,7 +15,8 @@ const profileRoutes = require('./routes/profile-routes');
 const indexRoutes = require('./routes/index');
 const passportSetup = require('./config/passport-setup');
 const mongoose = require('mongoose');
-const cookieSession = require('cookie-session');
+var MongoStore = require('connect-mongo')(session);
+//const cookieSession = require('cookie-session');
 const passport = require('passport');
 
 var app = express();
@@ -23,33 +24,47 @@ var app = express();
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
-
-// Setup Cookies
-app.use(cookieSession({
-    maxAge: 24 * 60 * 60 * 1000,
-    keys : [keys.session.cookieKey]
-}))
-
-// Initialize Passport and Cookies
-app.use(passport.initialize());
-app.use(passport.session());
-
 // Connect to mongodb
 mongoose.connect(keys.mongodb.dbURI, {
     useNewUrlParser: true,
     auth: {
         user: keys.mongodb.username,
         password: keys.mongodb.password,
-    }}, function (err, db) {
-        if (err) throw err;
-        console.log('Connected to MongoDB');
     }
+}, function (err, db) {
+    if (err) throw err;
+    console.log('Connected to MongoDB');
+}
 );
+var db = mongoose.connection;
+
+/*
+// Setup Cookies
+app.use(cookieSession({
+    maxAge: 24 * 60 * 60 * 1000,
+    keys: [keys.session.cookieKey]
+})) */
+app.use(session({
+    secret: 'keyboard cat',
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false, maxAge: (4 * 60 * 60 * 1000) },
+    store: new MongoStore({
+        mongooseConnection: db
+    })
+}));
+// Initialize Passport and Cookies
+app.use(passport.initialize());
+app.use(passport.session());
+
+
 
 // setup routes
 app.use('/auth', authRoutes);
 app.use('/profile', profileRoutes);
 
+console.log(db);
+console.log('-----------------------hi---------------------');
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(__dirname + '/public/favicon.ico'));
@@ -58,22 +73,23 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-
-console.log(process.env.PORT);
-
 app.set('port', process.env.PORT || 3000);
+
+
+/*
 app.use(session({
-    genid: function (request) {
-        return genuuid()
-    },
-    secret: keys.session.key,
+    secret: keys.session.cookieKey,
     saveUninitialized: true,
     resave: false,
     cookie:
     {
         maxAge: 60000
-    }
+    },
+    store: new MongoStore({
+        mongooseConnection: db
+    })
 }))
+*/
 controller(app);
 
 var server = app.listen(app.get('port'), function () {
@@ -103,6 +119,7 @@ function uuidFromBytes(rnd) {
  * TODO: 
  * Refresh  credentials in keys file: google, facebook, 
  * Add elasticsearch CRUD form for editing translations
+ * Add flash messages for login-required redirects
  * Add indicator for translation type above each translation
  * Add login capability for Facebook and Twitter
  * Do something after Request has been successfully posted

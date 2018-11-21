@@ -1,39 +1,38 @@
 ﻿<% for (let i = 0; i < numberOfTranslations; i++) { %>
 <div class="container bg-white px-0 my-3 p-3 border border-secondary">
-    <p><b><font class="display-4"><%= targetWord %></font> </b> </p>
-    <hr><p><b>Word/Phrase: </b> </p> 
-	<p><button onclick="playWord()">▶ (Listen Word)</button></p>
+    <p><b><font class="display-4"><%= targetWord[i] %></font> </b> </p>
+    <hr><p><b>Word/Phrase: </b> </p>
+    <p><button class="btn" onclick="playWord()">▶ (Listen Word)</button></p>
+    <% if (translation[i].indexOf(",,,") > 0 ) { translation[i] = translation[i].split(",,,") } %>
     <% if (Array.isArray(translation[i])) {   %>
-        <% for(let j = 0; j < translation[i].length; j++) { %>
-            <p class="indented"><%= translation[i][j] %></p>
-        <% } %>
-    <% } else { %>
-        <p class="indented"><%= translation %></p>
+    <% for(let j = 0; j < translation[i].length; j++) { %>
+    <p class="indented"><%= translation[i][j] %></p>
     <% } %>
-	<audio id="audioWord" src="https://hcisstorage.blob.core.windows.net/translations-audio/<%= audioWord[i] %>" ></audio>
-
+    <% } else { %>
+    <p class="indented"><%= translation %></p>
+    <% } %>
+    <audio id="audioWord" src="https://hcisstorage.blob.core.windows.net/translations-audio/<%= audioWord[i] %>"></audio>
     <hr><p><b>Example Sentence:</b></p>
-	<p><button onclick="playSentence()">▶ (Listen Sentence)</button></p>
-            
-    <% if (Array.isArray(exampleSentence[i])) {   %>
-        <% for(let k = 0; k <= exampleSentence[i].length; k++) { %>
-            <p class="indented"><%= exampleSentence[i][k] %></p>
-        <% } %>
-    <% } else { %>
-        <p class="indented"><%= exampleSentence %></p>
-    <% } %>
-    
-	<audio id="audioSentence" src="https://hcisstorage.blob.core.windows.net/translations-audio/<%= audioSentence[i] %>" ></audio>
-	
-	<hr><p><b>Translator Notes:</b></p>
-    <p class="indented"><%= notes[i] %></p>
+    <p><button class="btn" onclick="playSentence()">▶ (Listen Sentence)</button></p>
 
+    <% if (exampleSentence[i].indexOf(",,,") > 0 ) { exampleSentence[i] = exampleSentence[i].split(",,,") } %>
+    <% if (Array.isArray(exampleSentence[i])) {   %>
+    <% for(let k = 0; k <= exampleSentence[i].length; k++) { %>
+    <p class="indented"><%= exampleSentence[i][k] %></p>
+    <% } %>
+    <% } else { %>
+    <p class="indented"><%= exampleSentence %></p>
+    <% } %>
+
+    <audio id="audioSentence" src="https://hcisstorage.blob.core.windows.net/translations-audio/<%= audioSentence[i] %>"></audio>
+
+    <hr><p><b>Translator Notes:</b></p>
+    <p class="indented"><%= notes[i] %></p>
     <hr><p><b>Author:</b></p>
     <p class="indented"><%= author[i] %></p>
-	<hr><p><b>Tags:</b></p>
+    <hr><p><b>Tags:</b></p>
     <p class="indented"><%= tags[i] %></p>
-    <p><font><a href="#">👍</a></font><%= upvotes[i] %> <font><a href="#">👎</a></font><%= downvotes[i] %></p>
-	<p><font size="0"><%= id[i] %></font></p>
-
+    <p><button class="btn" id="upvote"><%= upvotes[i] %> 👍</button> <button class="btn" id="downvote"><%= downvotes[i] %> 👎</button></p>
+    <p><font id="translationId" size="0"><%= id[i] %></font></p>
 </div>
 <% } %>

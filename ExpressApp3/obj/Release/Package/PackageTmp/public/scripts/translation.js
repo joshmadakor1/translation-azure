@@ -71,18 +71,15 @@ $(document).ready(function(){
         //let tags = document.getElementById("requestTags").value;
         let sourceLanguage = document.getElementById("sourceLanguage").value;
         let destinationLanguage = document.getElementById("destinationLanguage").value;
-        let requester = document.getElementById("requester").value;
+        //let requester = document.getElementById("requester").value;
         //let bounty = document.getElementById("bounty").value;
-
-        console.log(`${sourceLanguage}\n${destinationLanguage}\n${requester}`);
+        
 
         let requestSubmission = {
             term: term,
             details: details,
             sourceLanguage: sourceLanguage,
             destinationLanguage: destinationLanguage,
-            requester: requester,
-            bounty: 0.00
         }
 
         if (validate_Json_Submission(requestSubmission)) {
@@ -95,7 +92,7 @@ $(document).ready(function(){
                 success: function(data){
                     console.log(data);
                     console.log('Post Success!');
-                    let newUrl = window.location.protocol + "//" + window.location.host + "/earn";
+                    let newUrl = window.location.protocol + "//" + window.location.host + "/contribute";
                     window.location.href = newUrl;
                 }
             });
@@ -107,6 +104,7 @@ $(document).ready(function(){
 
 
     $('#submitWord').unbind("click").click(function () {
+
         let sourceLanguage = document.getElementById("sourceLanguage").value;
         let destinationLanguage = document.getElementById("destinationLanguage").value;
 
@@ -124,9 +122,9 @@ $(document).ready(function(){
         if (term === undefined) {
           term = document.getElementById("term").innerHTML;
         }
-        let wordTranslation = (document.getElementById("WordTranslation").value).split("\n");
+        let wordTranslation = (document.getElementById("WordTranslation").value).replace(/\n/g,",,,");
         //let audioWord = document.getElementById("audioWord").value;
-        let sentenceTranslation = (document.getElementById("SentenceTranslation").value).split("\n");
+        let sentenceTranslation = (document.getElementById("SentenceTranslation").value).replace(/\n/g, ",,,");
         //let audioSentence = document.getElementById("audioSentence").value;
         let translatorNotes = document.getElementById("TranslatorNotes").value;
         let tags = document.getElementById("Tags").value;
@@ -182,6 +180,188 @@ $(document).ready(function(){
             alert("make sure to fill in all the fields");
             return;
         }
+    });
+
+    $('#submitEdit').unbind("click").click(function () {
+
+        let sourceLanguage = document.getElementById("sourceLanguage").value;
+        let destinationLanguage = document.getElementById("destinationLanguage").value;
+
+        if (sourceLanguage === destinationLanguage) {
+            alert("Source language and destination language cannot be the same.");
+            return;
+        }
+
+        if (document.getElementById("audiolink1") === null || document.getElementById("audiolink2") === null) {
+            alert("You must submit audio recordings.");
+            return;
+        }
+
+        let term = document.getElementById("term").value;
+        if (term === undefined) {
+            term = document.getElementById("term").innerHTML;
+        }
+        let wordTranslation = (document.getElementById("WordTranslation").value).replace(/\n/g,",,,");
+        //let audioWord = document.getElementById("audioWord").value;
+        let sentenceTranslation = (document.getElementById("SentenceTranslation").value).replace(/\n/g, ",,,");
+        //let audioSentence = document.getElementById("audioSentence").value;
+        let translatorNotes = document.getElementById("TranslatorNotes").value;
+        let tags = document.getElementById("Tags").value;
+        let audioWord = document.getElementById("audiolink1").download;
+        let audioSentence = document.getElementById("audiolink2").download;
+        let id = document.getElementById("translationId").value;
+
+       
+
+        //console.log(term);
+        let translationSubmission = {
+            term: term,
+            wordTranslation: wordTranslation,
+            sentenceTranslation: sentenceTranslation,
+            translatorNotes: translatorNotes,
+            tags: tags,
+            audioWord: audioWord,
+            audioSentence: audioSentence,
+            sourceLanguage: sourceLanguage,
+            destinationLanguage: destinationLanguage,
+            id: id
+        }
+
+        if (validate_Json_Submission(translationSubmission)) {
+            $.ajax({
+                type: 'POST',
+                url: '/submitEdit',
+                cache: false,
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify(translationSubmission),
+                dataType: "text",
+                success: function (data) {
+                    console.log('Post Success!');
+                    let newUrl = window.location.protocol + "//" + window.location.host + "/";
+                    window.location.href = newUrl;
+                },
+                error: function (error) {
+                    console.log("Post Error!\n" + error);
+                },
+                complete: function (textStatus, errorThrown) {
+
+                }
+            });
+
+        }
+        else {
+            alert("make sure to fill in all the fields");
+            return;
+        }
+    });
+
+
+
+
+
+
+
+    $('#upvote').unbind("click").click(function () {
+
+        let translationId = document.getElementById("translationId").innerHTML;
+        let votecount = document.getElementById("upvote").innerHTML.split(" ")[0];
+        console.log(votecount);
+       
+        $.ajax({
+            type: 'POST',
+            url: `/upvote/?id=${translationId}`,
+            cache: false,
+            contentType: "application/json; charset=utf-8",
+            dataType: "text",
+            success: function (data) {
+                //let jsonResponse = JSON.parse(data);
+                console.log(data);
+                //console.log(jsonResponse.count);
+                console.log('Post Success!');
+                votecount = ++votecount;
+                console.log(votecount);
+                document.getElementById("upvote").innerHTML = (votecount + " &#128077;");
+                //let newUrl = window.location.protocol + "//" + window.location.host + "/";
+                //window.location.href = newUrl;
+            },
+            error: function (error) {
+                console.log("Post Error!\n" + error);
+            },
+            complete: function (textStatus, errorThrown) {
+                console.log('complete.');
+            }
+        });
+    });
+
+    $('#downvote').unbind("click").click(function () {
+
+        let translationId = document.getElementById("translationId").innerHTML;
+        let votecount = document.getElementById("downvote").innerHTML.split(" ")[0];
+        console.log(votecount);
+
+        $.ajax({
+            type: 'POST',
+            url: `/downvote/?id=${translationId}`,
+            cache: false,
+            contentType: "application/json; charset=utf-8",
+            dataType: "text",
+            success: function (data) {
+                //let jsonResponse = JSON.parse(data);
+                console.log(data);
+                //console.log(jsonResponse.count);
+                console.log('Post Success!');
+                votecount = ++votecount;
+                console.log(votecount);
+                document.getElementById("downvote").innerHTML = (votecount + " &#128078;");
+                //let newUrl = window.location.protocol + "//" + window.location.host + "/";
+                //window.location.href = newUrl;
+            },
+            error: function (error) {
+                console.log("Post Error!\n" + error);
+            },
+            complete: function (textStatus, errorThrown) {
+                console.log('complete.');
+            }
+        })
+    });
+
+
+
+
+
+
+
+
+
+
+    $('#deleteTranslation').unbind("click").click(function () {
+        console.log('hi');
+        console.log(document.getElementById("translationId").value);
+        let translationId = document.getElementById("translationId").value;
+        let deleteTranslation = confirm(`You sure you want to PERMANENTLY delete the translation? All upvotes/downvotes from it will be lost.`);
+        console.log(deleteTranslation);
+        if (!deleteTranslation) { return; }
+        console.log('deleting translation.'); 
+        $.ajax({
+            type: 'POST',
+            url: `/delete/?id=${translationId}`,
+            cache: false,
+            contentType: "application/json; charset=utf-8",
+            dataType: "text",
+            success: function (data) {
+                console.log('Post Success!');
+                //let newUrl = window.location.protocol + "//" + window.location.host + "/";
+                //window.location.href = newUrl;
+            },
+            error: function (error) {
+                console.log("Post Error!\n" + error);
+            },
+            complete: function (textStatus, errorThrown) {
+                console.log('complete.');
+                let newUrl = window.location.protocol + "//" + window.location.host + "/profile/viewtranslations";
+                window.location.href = newUrl;
+            }
+        });
     });
 
     $('#submitAnswer').on('click', function() {

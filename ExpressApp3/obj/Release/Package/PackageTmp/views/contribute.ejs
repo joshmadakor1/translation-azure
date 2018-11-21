@@ -12,17 +12,15 @@
             <tr>
                 <td width="15%"><font size="5">From  </font>      </td>
                 <td width="15%"><font size="5">To   </font>        </td>
-                <td width="40%"><font size="5">Word/Phrase</font> </td>
-                <td width="20%"><font size="5">Notes   </font>        </td>
-                <td width="10%"><font size="5">Payout </font>     </td>
+                <td width="30%"><font size="5">Word/Phrase</font> </td>
+                <td width="30%"><font size="5">Notes   </font>        </td>
             </tr>
             <% for (let i = 0; i < question.length; i++) { %>
             <tr>
                 <td width="15%"><%= sourceLanguage[i] %>      </td>
                 <td width="15%"><%= destinationLanguage[i] %> </td>
-                <td width="40%"><a href="/answer/?_id=<%= id[i] %>"><%= question[i] %></a></td>
-                <td width="15%"><%= details[i] %> </td>
-                <td width="10%">$<%= bounty[i] %>              </td>
+                <td width="30%"><a href="/answer/?_id=<%= id[i] %>"><%= question[i] %></a></td>
+                <td width="30%"><%= details[i] %> </td>
             </tr>
             <% } %>
 
