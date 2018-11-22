@@ -55,6 +55,7 @@ module.exports = function (app) {
         //If user is not logged in, redirect them to login page
         console.log(mainResponse.user);
         if (!mainRequest.user) {
+            mainRequest.flash('danger', 'You must be logged in to answer translation requsts.');
             mainResponse.redirect('/auth/login');
             return;
         }
@@ -143,6 +144,8 @@ module.exports = function (app) {
                 let tags = [];
                 let notes = [];
                 let question = [];
+                let sourceLanguage = [];
+                let destinationLanguage = [];
                 
                 try {
                     definitionArray = response.body.hits.hits[0]._source.answers
@@ -152,6 +155,8 @@ module.exports = function (app) {
                 }
                 for (let count = 0; count < number_Of_Hits; count++) {
                     question.push(response.body.hits.hits[count]._source.question);
+                    sourceLanguage.push(response.body.hits.hits[count]._source.sourceLanguage);
+                    destinationLanguage.push(response.body.hits.hits[count]._source.destinationLanguage);
                     translation.push(response.body.hits.hits[count]._source.answers[0].definition.translation);
                     author.push(response.body.hits.hits[count]._source.answers[0].definition.author);
                     exampleSentence.push(response.body.hits.hits[count]._source.answers[0].definition.exampleSentence);
@@ -196,7 +201,9 @@ module.exports = function (app) {
                     tags: tags,
                     notes: notes,
                     id: id,
-                    user: mainRequest.user
+                    user: mainRequest.user,
+                    sourceLanguage: sourceLanguage,
+                    destinationLanguage: destinationLanguage
                 });
             })
 
@@ -260,6 +267,7 @@ module.exports = function (app) {
             });
         }
         else {
+            request.flash('danger', 'You must be logged in to request a translation.');
             response.redirect('/auth/login');
         }
     });

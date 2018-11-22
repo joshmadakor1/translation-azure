@@ -271,7 +271,7 @@ $(document).ready(function(){
         var newName = document.getElementById("newname").value
         console.log(newName);
         
-        var newValues = { $set: { firstName: newName } };
+        var newValues = { firstName: newName };
         console.log(newValues);
         
         $.ajax({
@@ -282,14 +282,33 @@ $(document).ready(function(){
             data: JSON.stringify(newValues),
             dataType: "text",
             success: function (data) {
+                var data = JSON.parse(data);
+                var errorMessages = "";
                 console.log('Post Success!');
-                let newUrl = window.location.protocol + "//" + window.location.host + "/profile";
-                window.location.href = newUrl;
+                console.log(data);
+                if (data.errors) {
+                    let numberOfErrors = data.errors.length;
+                    let count = 0;
+                    while (count < numberOfErrors) {
+                        console.log(data.errors[count].msg);
+                        errorMessages += ("<div class=\"container alert alert-danger\">" + data.errors[count].msg + "</div>");
+                        count++;
+                    }
+                    document.getElementById("messages").innerHTML = errorMessages;
+                }
+                else {
+                    let newUrl = window.location.protocol + "//" + window.location.host + "/profile";
+                    window.location.href = newUrl;
+                }
+                
+                
             },
-            error: function (error) {
-                console.log("Post Error!\n" + error);
+            error: function (data) {
+                console.log(data);
+                let newUrl = window.location.protocol + "//" + window.location.host + "/profile/changename";
+                //window.location.href = newUrl;
             },
-            complete: function (textStatus, errorThrown) {
+            complete: function (req, res, err) {
                 console.log('complete');
             }
         });

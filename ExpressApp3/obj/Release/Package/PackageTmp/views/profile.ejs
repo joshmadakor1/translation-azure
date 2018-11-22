@@ -10,15 +10,14 @@
             <% if (user.username.indexOf(" ") > 0) { %>
             <%= user.username.split(" ")[0] %>
             <% } else { %>
-            <%= user.username %>
             <% } %>
             <% } %>
-            <%= user.firstName %>!
+            <font id="firstName"><%= user.firstName %></font>!
         </font>
-        <font class="text-muted">[Edit Display Name]</font>
+        <button class="btn btn-sm btn-outline-secondary" id="editDisplayName">Edit Name</button>
 
     </div>
-    
+
     <div class="container bg-white px-0 my-3 p-3 border border-secondary text-muted">
         <div class="row">
             <div class="col-md-6 col-lg-3">
@@ -62,7 +61,6 @@
         <p>Raw Profile Info:</p>
         <%= user %>
     -->
-
     <% include ../partials/scripts %>
     <% include ../partials/footer %>
 </body>

@@ -23,7 +23,7 @@ router.get('/google', passport.authenticate('google', {
 
 // callback route for google to redirect to
 router.get('/google/redirect', passport.authenticate('google'), function (req, res) {
-    res.redirect('/profile');
+    res.redirect('/');
 });
 
 router.get('/facebook', passport.authenticate('facebook', { scope: ['email'] }));

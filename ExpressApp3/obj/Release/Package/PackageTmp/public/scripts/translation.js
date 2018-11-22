@@ -64,6 +64,10 @@ $(document).ready(function(){
         return htmlString;
     }
 
+    $('#editDisplayName').unbind("click").click(function () {
+        let newUrl = window.location.protocol + "//" + window.location.host + "/profile/changename";
+        window.location.href = newUrl;
+    });
 
     $('#submitRequest').unbind("click").click(function () {
         let term = document.getElementById("requestTerm").value;
@@ -101,6 +105,7 @@ $(document).ready(function(){
             alert("make sure to fill in all the fields");
         }
     });
+
 
 
     $('#submitWord').unbind("click").click(function () {
@@ -182,6 +187,7 @@ $(document).ready(function(){
         }
     });
 
+    
     $('#submitEdit').unbind("click").click(function () {
 
         let sourceLanguage = document.getElementById("sourceLanguage").value;
@@ -254,6 +260,61 @@ $(document).ready(function(){
             return;
         }
     });
+
+
+
+
+
+
+    $('#submitnamechange').unbind("click").click(function () {
+
+        var newName = document.getElementById("newname").value
+        console.log(newName);
+        
+        var newValues = { firstName: newName };
+        console.log(newValues);
+        
+        $.ajax({
+            type: 'POST',
+            url: '/profile/changename',
+            cache: false,
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify(newValues),
+            dataType: "text",
+            success: function (data) {
+                var data = JSON.parse(data);
+                var errorMessages = "";
+                console.log('Post Success!');
+                console.log(data);
+                if (data.errors) {
+                    let numberOfErrors = data.errors.length;
+                    let count = 0;
+                    while (count < numberOfErrors) {
+                        console.log(data.errors[count].msg);
+                        errorMessages += ("<div class=\"container alert alert-danger\">" + data.errors[count].msg + "</div>");
+                        count++;
+                    }
+                    document.getElementById("messages").innerHTML = errorMessages;
+                }
+                else {
+                    let newUrl = window.location.protocol + "//" + window.location.host + "/profile";
+                    window.location.href = newUrl;
+                }
+                
+                
+            },
+            error: function (data) {
+                console.log(data);
+                let newUrl = window.location.protocol + "//" + window.location.host + "/profile/changename";
+                //window.location.href = newUrl;
+            },
+            complete: function (req, res, err) {
+                console.log('complete');
+            }
+        });
+
+    });
+
 
 
 

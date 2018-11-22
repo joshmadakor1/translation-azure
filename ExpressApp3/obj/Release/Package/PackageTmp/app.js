@@ -18,7 +18,8 @@ const mongoose = require('mongoose');
 var MongoStore = require('connect-mongo')(session);
 //const cookieSession = require('cookie-session');
 const passport = require('passport');
-
+const expressValidator = require('express-validator');
+const flash = require('connect-flash');
 var app = express();
 
 // view engine setup
@@ -53,11 +54,38 @@ app.use(session({
         mongooseConnection: db
     })
 }));
+
 // Initialize Passport and Cookies
 app.use(passport.initialize());
 app.use(passport.session());
 
+// Express Messages Middleware
+app.use(require('connect-flash')());
+app.use(function (req, res, next) {
+    res.locals.messages = require('express-messages')(req, res);
+    next();
+});
 
+// Express Validator Middleware
+app.use(expressValidator({
+    errorFormatter: function (param, msg, value) {
+        var namespace = param.split('.')
+            , root = namespace.shift()
+            , formParam = root;
+
+        while (namespace.length) {
+            formParam += '[' + namespace.shift() + ']';
+        }
+        return {
+            param: formParam,
+            msg: msg,
+            value: value
+        };
+    }
+}));
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 
 // setup routes
 app.use('/auth', authRoutes);
@@ -69,8 +97,7 @@ console.log('-----------------------hi---------------------');
 // uncomment after placing your favicon in /public
 //app.use(favicon(__dirname + '/public/favicon.ico'));
 app.use(logger('dev'));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.set('port', process.env.PORT || 3000);

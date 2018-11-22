@@ -5,6 +5,8 @@ const esRequest    = require('request');
 const esPort       = 9243;
 const esUrl        = keys.elasticSearch.url;
 const EventEmitter = require('events');
+const expressValidator = require('express-validator');
+const { check, validationResult } = require('express-validator/check');
 
 // load profile page
 router.get('/', function (req, res) {
@@ -76,35 +78,48 @@ router.get('/changename', function (req, res) {
 });
 
 router.post('/changename', function (req, res) {
-    console.log(req.body.$set.firstName);
+    console.log(req.body.firstName);
     console.log(req.user.id);
+    req.checkBody('firstName', "Username must be between 1 and 20 characters long.").isLength({ min: 1, max: 20 });
 
-    User.findById(req.user.id).then(function (currentUser) {
-        if (currentUser) {
-            console.log('-------found one  user---------');
-            console.log(currentUser);
-            console.log(currentUser.firstName);
-            currentUser.firstName = req.body.$set.firstName;
-            currentUser.save(function (err) {
-                if (err) {
-                    console.log('error@@@@@@@@@@@@@');
-                    res.sendStatus(500);
-                }
-                else {
-                    console.log('success@@@@@@@@@@@@@@@@');
-                    res.sendStatus(200);
-                }
-            });
-            
-            // User Exists
-            // console.log(`User is: ${currentUser}`);
-            //done(null, currentUser);
-        }
-        else {
-            // Create new user
-           
-        }
-    })
+    let errors = req.validationErrors();
+   
+    if (errors) {
+        var response = {
+            errors: errors
+        };
+        console.log('error@@@@@@@@@@@@@');
+        res.send(response);
+        
+    }
+    else {
+        User.findById(req.user.id).then(function (currentUser) {
+            if (currentUser) {
+                console.log('-------found one  user---------');
+                console.log(currentUser);
+                console.log(currentUser.firstName);
+                currentUser.firstName = req.body.firstName;
+                currentUser.save(function (err) {
+                    if (err) {
+                        console.log('error@@@@@@@@@@@@@');
+                        res.send({message: "user not found"});
+                    }
+                    else {
+                        console.log('success@@@@@@@@@@@@@@@@');
+                        res.send({message: "user successfully updated"});
+                    }
+                });
+
+                // User Exists
+                // console.log(`User is: ${currentUser}`);
+                //done(null, currentUser);
+            }
+            else {
+                // Create new user
+
+            }
+        })
+    }
 });
 
 

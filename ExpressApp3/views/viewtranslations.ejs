@@ -11,7 +11,7 @@
     </div>
     <div class="container bg-white px-0 my-3 p-3 border border-secondary text-muted">
         <% for (let i = 0; i < translationIds.length; i++) { %>
-        (<a href="/?word=<%= translationWords[i] %>">View</a>) (<a href="/profile/edittranslation/?id=<%= translationIds[i] %>">Edit</a>) <%= translationWords[i] %> → <%= translationTranslations %> <br />
+        (<a href="/?word=<%= translationWords[i] %>">View</a>) (<a href="/profile/edittranslation/?id=<%= translationIds[i] %>">Edit</a>) <%= translationWords[i] %> → <%= translationTranslations[i] %> <br />
         <% } %>
     </div>
 
